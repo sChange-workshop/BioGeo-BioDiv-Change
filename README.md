@@ -43,7 +43,8 @@ These scripts prepare the data for analysis. First (01), studies with large exte
 **bt folder** - biome-taxa model
 * **code**
 
-This folder contains scripts that: (00) fit the biome-taxa models, (00a) examined diagnostics of model fit, (01) gets the coefficients from fitted models, (02) wrangles coefficient estimates and metadata ready for plotting, (03) plots maps and posterior densities of parameters of interest, (04) plots sensitivity analyses, (05) creates table of coefficient estimates. 
+This folder contains scripts that: (00) fit the biome-taxa models, (00a) examined diagnostics of model fit, (01) gets the coefficients from fitted models, (02) wrangles coefficient estimates and metadata ready for plotting, (03) plots maps and posterior densities of parameters of interest, (04) plots sensitivity analyses, (05) creates table of coefficient estimates.
+
     + 00_HLM_Jne.R
     + 00_HLM_Jtu.R
     + 00_HLM_S.R
@@ -68,6 +69,7 @@ This Rdata object contains all of the coefficient estimates from the biome-taxa 
 * **code**
 
 This folder contains scripts that: (00) fit the realm-climate-taxa models, (00a) examined diagnostics of model fit, (01) gets the coefficients from fitted models, (02) plots posterior densities of parameters of interest, (03) plots sensitivity analyses.
+
     + 00_HLM_Jne.R			
     + 00_HLM_Jtu.R			
     + 00_HLM_S.R		
