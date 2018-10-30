@@ -42,10 +42,12 @@ These scripts prepare the data for analysis. First (01), studies with large exte
 
 **bt folder** - biome-taxa model
 * **code**
+
 This folder contains scripts that: (00) fit the biome-taxa models, (00a) examined diagnostics of model fit, (01) gets the coefficients from fitted models, (02) wrangles coefficient estimates and metadata ready for plotting, (03) plots maps and posterior densities of parameters of interest, (04) plots sensitivity analyses, (05) creates table of coefficient estimates. 
     + 00_HLM_Jne.R
     + 00_HLM_Jtu.R
     + 00_HLM_S.R
+    + 00a_nuts_diagnostics.R
     + 01_bt_getCoefs_remote.R
     + 02a_bt_coef_wrangle.R
     + 02b_bt_alpha_beta_relationships_wrangle.R
@@ -58,19 +60,23 @@ This folder contains scripts that: (00) fit the biome-taxa models, (00a) examine
     + 04_bt_sensitivity_plots.R
     + 05_SI_tables.R
 * **model_fits_output**
+
 This Rdata object contains all of the coefficient estimates from the biome-taxa models.
     + BTRfyID_coef_ranef_160818.Rdata
 
 **rct folder** - realm-climate-taxa model
 * **code**
+
 This folder contains scripts that: (00) fit the realm-climate-taxa models, (00a) examined diagnostics of model fit, (01) gets the coefficients from fitted models, (02) plots posterior densities of parameters of interest, (03) plots sensitivity analyses.
     + 00_HLM_Jne.R			
     + 00_HLM_Jtu.R			
-    + 00_HLM_S.R			
+    + 00_HLM_S.R		
+    + 00a_nuts_diagnostics.R
     + 01_rct_getCoefs_remote.R
     + 03_rct_density_plot.R
     + 04_rct_sensitivity_plots.R
 * **model_fits_output**
+
 This Rdata object contains all of the coefficient estimates from the realm-climate-taxa models.
     + RCTRfyID_rarefyID_coef.Rdata
 
