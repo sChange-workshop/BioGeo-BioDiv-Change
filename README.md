@@ -2,6 +2,8 @@
 
 This repository contains code necessary to replicate data analysis, figures, and tables for the sChange Working Group manuscript "Biodiversity trends are stronger in marine than terrestrial assemblages".
 
+It is archived on Zenodo at : https://doi.org/10.5281/zenodo.1473861
+
 We use the new BioTIME database [Dornelas et al. 2018](https://doi.org/10.1111/geb.12729) to analyze community time-series datasets that record species identity, abundance, and richness. Here, we synthesize millions of biodiversity records from taxa and biomes across the globe, to estimate rates of diversity change (species richness, ENSPIE) and species turnover (composition, abundance) through time. We ask:
 
 1. Across the sites, what is the overall of species richness change, and the turnover component of Jaccard's dissimilarity?
