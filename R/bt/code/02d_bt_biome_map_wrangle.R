@@ -172,7 +172,7 @@ Jtu_re <- BT_biome_ranef %>% filter(model=='Jtu_norm') %>% select(Slope_ranef) %
 Jtu_re_quantile <- quantile(Jtu_re, probs = seq(0,1,by=0.2))
 
 Jne_re <- BT_biome_ranef %>% filter(model=='Jne_norm') %>% select(Slope_ranef) %>% .$Slope_ranef
-Jne_re_quantile <- quantile(Jtu_re, probs = seq(0,1,by=0.2))
+Jne_re_quantile <- quantile(Jne_re, probs = seq(0,1,by=0.2))
 
 # join terrestrial and marine data
 all_df <- bind_rows(marine_df %>% select(-ECO_CODE), terr_df)

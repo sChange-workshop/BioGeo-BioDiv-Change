@@ -194,6 +194,12 @@ cowplot::plot_grid(mar_biome_plot_S + annotation_custom(ggplotGrob(global_s_inse
 # label for the legend
 Jne_leg_label <- c(Jne_re_quantile[1:3], 0, Jne_re_quantile[4:6]) %>% signif(2) %>% as.numeric() %>% format(scientific = T)
 
+Jne_estimate_label <- as.numeric(signif(c(Jne_re_quantile[1:3], 0, Jne_re_quantile[4:6]) + 
+                                          BT_global_estimates %>% filter(model=='Jne_norm' & time_period=='ALL') %>% 
+                                          filter(term=='Slope') %>% .$Estimate, 4) )
+
+Jne_combined_label <- paste0(paste(Jne_leg_label, Jne_estimate_label, sep = ' ('),')') 
+
 mar_biome_plot_Jne <- ggplot() +
   geom_polygon(data = filter(alldf, Realm2 == 'Marine'),
                aes(x = long, y = lat, group = group, linetype = NA, fill = Jne_re), alpha = 0.85) +
@@ -203,7 +209,7 @@ mar_biome_plot_Jne <- ggplot() +
   scale_fill_manual(name = '', values = c('1' = '#b2182b', '2' = '#ef8a62', '3' = '#fddbc7',
                                           '4' = '#d1e5f0', '5' = '#67a9cf', '6' = '#2166ac'), 
                     breaks = c('1', '2', '3', '4', '5', '6'),
-                    labels = c(Jne_leg_label[-1]), drop = FALSE) +
+                    labels = c(Jne_combined_label[-1]), drop = FALSE) +
   scale_colour_manual(guide = FALSE, values = c('1' = '#b2182b', '2' = '#ef8a62', '3' = '#fddbc7',
                                                 '4' = '#d1e5f0', '5' = '#67a9cf', '6' = '#2166ac'), 
                       breaks = c('1', '2', '3', '4', '5', '6')) +
@@ -218,25 +224,83 @@ mar_biome_plot_Jne <- ggplot() +
   # coord_map('mollweide', xlim = c(-180, 180)) +
   theme(panel.grid.minor = element_blank(), 
         axis.text = element_blank(), axis.ticks = element_blank(),#)
-        legend.position = c(0.2, 0.4), legend.direction = 'horizontal', 
+        legend.position = c(0.2, 0.42), legend.direction = 'horizontal', 
         legend.key.size = unit(5, 'mm'), legend.spacing.x=unit(0, 'mm'),
-        #legend.title = element_text(size = 16), 
-        legend.text = element_text(angle = 90, vjust = 10, margin = margin(t = 100)), legend.text.align = 0.8, 
-        legend.title = element_text(margin = margin(t=200)),
+        legend.text = element_text(angle = 90, margin = margin(t=0.5)),
         plot.margin = margin(0,0,0,0, 'mm'), legend.background = element_rect(fill = 'transparent'),
+        legend.text.align = 0.9,
         plot.subtitle = element_text(size = 14, face = 'bold')) +
-  guides(fill = guide_legend(title = 'Biome departure from\noverall trend', 
+  guides(fill = guide_legend(title = 'Biome departure\n(estimate)', 
                              title.position = 'top',  label.position = 'top', nrow = 1, 
                              title.vjust = 5, label.vjust = 0.8))
 
 ab_concept_taxa_plot_allPoints <- ab_concept_taxa_plot_allPoints %>%
   mutate(realm_label = ifelse(REALM=='Marine', 'b   Marine', 'd   Terrestrial/Freshwater'))
 
+terr_biome_plot_Jne <- ggplot() +
+  geom_polygon(data=world, aes(long, lat, group = group), colour=NA, fill='#7f7f7f', size=0) +
+  geom_point(data = filter(coords2, REALM != 'Marine'),
+             aes(x = rarefyID_x, y = rarefyID_y, colour = Jne_re), size = 0.5, stroke = 1.2) +
+  geom_polygon(data = filter(alldf, Realm2 != 'Marine'),
+               aes(x = long, y = lat, group = group, linetype = NA, fill = Jne_re), alpha = 0.85) +
+  scale_fill_manual(name = '', values = c('1' = '#b2182b', '2' = '#ef8a62', '3' = '#fddbc7',
+                                          '4' = '#d1e5f0', '5' = '#67a9cf', '6' = '#2166ac'), 
+                    breaks = c('1', '2', '3', '4', '5', '6'),
+                    labels = c(Jne_combined_label[-1]), drop = FALSE) +
+  scale_colour_manual(guide = FALSE, values = c('1' = '#b2182b', '2' = '#ef8a62', '3' = '#fddbc7',
+                                                '4' = '#d1e5f0', '5' = '#67a9cf', '6' = '#2166ac'), 
+                      breaks = c('1', '2', '3', '4', '5', '6')) +
+  scale_size_area() +
+  labs(x = '',
+       y = '',
+       subtitle = 'c    Terrestrial/Freshwater biomes') +
+  theme_bw() +
+  scale_x_continuous(breaks = seq(-180, 180, by = 30)) +
+  scale_y_continuous(breaks = c(0, -60, -23.5, 23.5, 60)) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  # coord_map('mollweide', xlim = c(-180, 180)) +
+  theme(panel.grid.minor = element_blank(), 
+        axis.text = element_blank(), axis.ticks = element_blank(),#)
+        legend.position = c(0.2, 0.42), legend.direction = 'horizontal', 
+        legend.key.size = unit(5, 'mm'), legend.spacing.x=unit(0, 'mm'),
+        legend.text = element_text(angle = 90, margin = margin(t=0.5)),
+        plot.margin = margin(0,0,0,0, 'mm'), legend.background = element_rect(fill = 'transparent'),
+        legend.text.align = 0.9,
+        plot.subtitle = element_text(size = 14, face = 'bold')) +
+  guides(fill = guide_legend(title = 'Biome departure\n(estimate)', 
+                             title.position = 'top',  label.position = 'top', nrow = 1, 
+                             title.vjust = 5, label.vjust = 0.8))
+
+
+# two-panel figure with maps only
+# top <- cowplot::plot_grid(mar_biome_plot_Jne + annotation_custom(ggplotGrob(global_jne_inset), 
+                                                                 # xmin = -158, xmax = -88, ymin = -73, ymax = 0))
+# 
+# bottom <- cowplot::plot_grid(terr_biome_plot_Jne + annotation_custom(ggplotGrob(global_jne_inset), 
+#                                                                      xmin = -170, xmax = -100, ymin = -73, ymax = 0))
+
+
+# pdf(width = 11, height = 12, file = 'Jne_mapOnly.pdf')
+# cowplot::plot_grid(top, bottom, nrow = 2)
+# dev.off()
+
+# for four panel figure with taxa-level estimates
+# colours for each taxa
+taxa_col2 = c('Multiple taxa' = '#e6f598',
+              'Amphibians' = '#fee08b',
+              'Benthos' = '#5e4fa2',
+              'Birds' = '#f46d43',
+              'Fish' = '#3288bd',
+              'Invertebrates' = '#abdda4',
+              'Mammals' = '#9e0142',
+              'Marine invertebrates/plants' = '#66c2a5',
+              'Plant' = '#fdae61')
+
 Jne_marine <- ggplot() +
   # facet_wrap(~realm_label, ncol = 1) +
   geom_hline(yintercept = 0, lty=2, alpha = 1, lwd = 0.5) +
-  geom_hline(data = filter(BT_global_estimates, model=='Jne_norm' & term=='Slope'), aes(yintercept = Estimate)) +
-  geom_rect(data = filter(BT_global_estimates, model=='Jne_norm' & term=='Slope'), 
+  geom_hline(data = filter(BT_global_estimates, model=='Jne_norm' & term=='Slope' & time_period=='ALL'), aes(yintercept = Estimate)) +
+  geom_rect(data = filter(BT_global_estimates, model=='Jne_norm' & term=='Slope' & time_period=='ALL'), 
             aes(ymin = lower, ymax = upper, xmin = -Inf, xmax = Inf), alpha=0.4) +
   geom_linerange(data = filter(ab_concept_taxa_plot_allPoints, realm2=='Marine'),
                  aes(x = hc_y, ymin = deltaJne_lower, ymax = deltaJne_upper, 
@@ -245,7 +309,7 @@ Jne_marine <- ggplot() +
              aes(x = hc_y, y = deltaJne, group= interaction(REALM, Biome, taxa_mod2), colour = taxa_mod2, shape=taxa_mod2), 
              size=2) +
   scale_shape_manual(name = 'Taxa', values = shapes_mod2) +
-  scale_colour_manual(name = 'Taxa', values = taxa_col) + 
+  scale_colour_manual(name = 'Taxa', values = taxa_col2) + 
   labs(y = 'Nestedness change per year',
        x = 'Latitude',
        subtitle = 'b   Marine') +
@@ -276,7 +340,7 @@ Jne_terr <- ggplot() +
              aes(x = hc_y, y = deltaJne, group= interaction(REALM, Biome, taxa_mod2), colour = taxa_mod2, shape=taxa_mod2), 
              size=2) +
   scale_shape_manual(name = 'Taxa', values = shapes_mod2) +
-  scale_colour_manual(name = 'Taxa', values = taxa_col) + 
+  scale_colour_manual(name = 'Taxa', values = taxa_col2) + 
   labs(y = 'Nestedness change per year',
        x = 'Latitude',
        subtitle = 'd   Terrestrial/Freshwater') +
@@ -294,64 +358,12 @@ Jne_terr <- ggplot() +
   coord_flip()
 
 
-# setwd('~/Dropbox/BiogeoBioTIME/Figures/')
-# setwd('~/Desktop/')
-# 
-# ggsave('FigSx_Jne_taxa_coefs.png', width = 120, height = 200, units = 'mm')
-
-terr_biome_plot_Jne <- ggplot() +
-  geom_polygon(data=world, aes(long, lat, group = group), colour=NA, fill='#7f7f7f', size=0) +
-  geom_point(data = filter(coords2, REALM != 'Marine'),
-             aes(x = rarefyID_x, y = rarefyID_y, colour = Jne_re), size = 0.5, stroke = 1.2) +
-  geom_polygon(data = filter(alldf, Realm2 != 'Marine'),
-               aes(x = long, y = lat, group = group, linetype = NA, fill = Jne_re), alpha = 0.85) +
-  scale_fill_manual(name = '', values = c('1' = '#b2182b', '2' = '#ef8a62', '3' = '#d1e5f0', 
-                                          '4' = '#67a9cf', '5' = '#2166ac'), 
-                    breaks = c('1', '2', '3', '4', '5'),
-                    labels = c(Jne_leg_label[-1]), drop = FALSE) +
-  scale_colour_manual(guide = FALSE, values = c('1' = '#b2182b', '2' = '#ef8a62', '3' = '#d1e5f0', 
-                                                '4' = '#67a9cf', '5' = '#2166ac'), 
-                      breaks = c('1', '2', '3', '4', '5')) +
-  scale_size_area() +
-  labs(x = '',
-       y = '',
-       subtitle = 'c    Terrestrial/Freshwater biomes') +
-  theme_bw() +
-  scale_x_continuous(breaks = seq(-180, 180, by = 30)) +
-  scale_y_continuous(breaks = c(0, -60, -23.5, 23.5, 60)) +
-  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
-  # coord_map('mollweide', xlim = c(-180, 180)) +
-  theme(panel.grid.minor = element_blank(), 
-        axis.text = element_blank(), axis.ticks = element_blank(),#)
-        legend.position = c(0.2, 0.4), legend.direction = 'horizontal', 
-        legend.key.size = unit(5, 'mm'), legend.spacing.x=unit(0, 'mm'),
-        #legend.title = element_text(size = 16), 
-        legend.text = element_text(angle = 90, vjust = 10, margin = margin(t = 100)), legend.text.align = 0.8, 
-        legend.title = element_text(margin = margin(t=200)),
-        plot.margin = margin(0,0,0,0, 'mm'), legend.background = element_rect(fill = 'transparent'),
-        plot.subtitle = element_text(size = 14, face = 'bold')) +
-  guides(fill = guide_legend(title = 'Biome departure from\noverall trend', 
-                             title.position = 'top',  label.position = 'top', nrow = 1, 
-                             title.vjust = 5, label.vjust = 0.8))
-
-
-# two-panel figure with maps only
-top <- cowplot::plot_grid(mar_biome_plot_Jne + annotation_custom(ggplotGrob(global_jne_inset), 
-                                                                 xmin = -170, xmax = -100, ymin = -73, ymax = 0))
-
-bottom <- cowplot::plot_grid(terr_biome_plot_Jne + annotation_custom(ggplotGrob(global_jne_inset), 
-                                                                     xmin = -170, xmax = -100, ymin = -73, ymax = 0))
-
-# pdf(width = 11, height = 12, file = 'Jne_mapOnly.pdf')
-# cowplot::plot_grid(top, bottom, nrow = 2)
-# dev.off()
-
 # four panel figure maps + taxa coefficients
 top <- cowplot::plot_grid(mar_biome_plot_Jne + annotation_custom(ggplotGrob(global_jne_inset), 
-                                                                 xmin = -170, xmax = -100, ymin = -73, ymax = 0),
+                                                                 xmin = -158, xmax = -88, ymin = -73, ymax = 0),
                           Jne_marine, nrow = 1, rel_widths = c(1, 0.6))
 bottom <- cowplot::plot_grid(terr_biome_plot_Jne + annotation_custom(ggplotGrob(global_jne_inset), 
-                                                                     xmin = -170, xmax = -100, ymin = -73, ymax = 0),
+                                                                     xmin = -158, xmax = -88, ymin = -73, ymax = 0),
                              Jne_terr, nrow = 1, rel_widths = c(1, 0.6))
 
 # with taxa estimates
@@ -362,3 +374,5 @@ bottom <- cowplot::plot_grid(terr_biome_plot_Jne + annotation_custom(ggplotGrob(
 # png(width = 15, height = 13, file = 'Jne_map2_withTaxa.png', units = 'in', res = 150)
 # cowplot::plot_grid(top, bottom, nrow = 2)
 # dev.off()
+
+# setwd('~/Desktop/')
