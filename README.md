@@ -17,8 +17,9 @@ Collaborators include the sChange Working Group, funded by iDiv in Leipzig, Germ
 Laura Antao, Amanda Bates, Helge Bruelheide, Jon Chase, Faye Moyes, Anne Magurran, Brian McGill, Isla Myers-Smith, Marten Winter, Anne Bjorkman, Diana Bowler, Jarrett E.K. Byrnes, Andrew Gonzalez, Jes Hines, Forest Isbell, Holly Jones, Laetitia M. Navarro, Patrick Thompson, Mark Vellend, Conor Waldock.
 
 **Contacts:** 
-Sarah Supp - sarah@weecology.org
-Shane Blowes - sablowes@gmail.com
+* Shane Blowes - sablowes@gmail.com
+* Sarah Supp - sarah@weecology.org
+* Maria Dornelas - maadd@st-andrews.ac.uk 
 
 ## Data 
 
