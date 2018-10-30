@@ -35,6 +35,8 @@ The remaining 8% (26 references) of biodiversity studies analysed were used with
 
 These scripts prepare the data for analysis. First (01), studies with large extents are consolidated into equal area grids, and studies with only one geographical location (or small extents) are similarly gridded. Species in these new cell-level time series are aggregated within years, and the coverage (or sample completeness) for each cell-year combination calculated, and all cell-year combinations with coverage < 0.85 are discarded. Second (02), we apply sample-based rarefaction to these new cell-level time series, and calculate diversity metrics (03) as the median of 199 bootstrap rarefactions. Finally (04), we rejoin our rarefied diversity metrics with metadata ready for fitting models.
 
+Please note that the majority of the code herein was written to run on a HPC cluster.
+
 * 01Study_to_Grid.R
 * 02rarefy_griddedData_clusterVersion.R 
 * 03collate_rarefied_resamps_median.R
@@ -49,6 +51,7 @@ This folder contains scripts that: (00) fit the biome-taxa models, (00a) examine
     + 00_HLM_Jtu.R
     + 00_HLM_S.R
     + 00a_nuts_diagnostics.R
+    + 00b_bt_diagnostic_plots.R
     + 01_bt_getCoefs_remote.R
     + 02a_bt_coef_wrangle.R
     + 02b_bt_alpha_beta_relationships_wrangle.R
@@ -74,6 +77,7 @@ This folder contains scripts that: (00) fit the realm-climate-taxa models, (00a)
     + 00_HLM_Jtu.R			
     + 00_HLM_S.R		
     + 00a_nuts_diagnostics.R
+    + 00b_rct_diagnosticPlots.R
     + 01_rct_getCoefs_remote.R
     + 03_rct_density_plot.R
     + 04_rct_sensitivity_plots.R
@@ -86,4 +90,4 @@ This Rdata object contains all of the coefficient estimates from the realm-clima
 ## Requirements
 Program R version 3.3.1 or greater
 
-Necessary Packages: brms (version 1.5.1 or greater), broom, dggridR, dplyr, ggplot2, ggthemes, iNEXT, lazyeval, maps, maptools, MEOWr, purrr, readr, scales, tibble, tidyr, vegan
+Necessary Packages: bayesplot, brms (version 1.5.1 or greater), broom, dggridR, dplyr, ggplot2, ggridges, ggthemes, iNEXT, lazyeval, maps, maptools, MEOWr, purrr, readr, scales, tibble, tidyr, vegan
