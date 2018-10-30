@@ -67,6 +67,7 @@ This folder contains scripts that: (00) fit the biome-taxa models, (00a) examine
 * **model_fits_output**
 
 This Rdata object contains all of the coefficient estimates from the biome-taxa models.
+
     + BTRfyID_coef_ranef_160818.Rdata
 
 **rct folder** - realm-climate-taxa model
@@ -82,9 +83,11 @@ This folder contains scripts that: (00) fit the realm-climate-taxa models, (00a)
     + 01_rct_getCoefs_remote.R
     + 03_rct_density_plot.R
     + 04_rct_sensitivity_plots.R
+    
 * **model_fits_output**
 
 This Rdata object contains all of the coefficient estimates from the realm-climate-taxa models.
+
     + RCTRfyID_rarefyID_coef.Rdata
 
 
