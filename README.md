@@ -17,8 +17,9 @@ Collaborators include the sChange Working Group, funded by iDiv in Leipzig, Germ
 Laura Antao, Amanda Bates, Helge Bruelheide, Jon Chase, Faye Moyes, Anne Magurran, Brian McGill, Isla Myers-Smith, Marten Winter, Anne Bjorkman, Diana Bowler, Jarrett E.K. Byrnes, Andrew Gonzalez, Jes Hines, Forest Isbell, Holly Jones, Laetitia M. Navarro, Patrick Thompson, Mark Vellend, Conor Waldock.
 
 **Contacts:** 
-Sarah Supp - sarah@weecology.org
-Shane Blowes - sablowes@gmail.com
+* Shane Blowes - sablowes@gmail.com
+* Sarah Supp - sarah@weecology.org
+* Maria Dornelas - maadd@st-andrews.ac.uk 
 
 ## Data 
 
@@ -66,6 +67,7 @@ This folder contains scripts that: (00) fit the biome-taxa models, (00a) examine
 * **model_fits_output**
 
 This Rdata object contains all of the coefficient estimates from the biome-taxa models.
+
     + BTRfyID_coef_ranef_160818.Rdata
 
 **rct folder** - realm-climate-taxa model
@@ -81,9 +83,11 @@ This folder contains scripts that: (00) fit the realm-climate-taxa models, (00a)
     + 01_rct_getCoefs_remote.R
     + 03_rct_density_plot.R
     + 04_rct_sensitivity_plots.R
+    
 * **model_fits_output**
 
 This Rdata object contains all of the coefficient estimates from the realm-climate-taxa models.
+
     + RCTRfyID_rarefyID_coef.Rdata
 
 
