@@ -119,7 +119,7 @@ S_rct_density <- ggplot() +
   guides(fill = guide_legend(override.aes = list(alpha = 1)))
 
 cowplot::plot_grid(S_biome_taxa_density, S_rct_density, ncol = 2, rel_widths = c(1, 0.7), labels = 'auto')
-# ggsave('test.pdf', width = 400, height = 300, units = 'mm')
+# ggsave('Fig2_textSize.pdf', width = 400, height = 300, units = 'mm')
 
 Jtu_rct_density <- ggplot() +
   geom_rect(data = rct_sample_posterior %>% distinct(Jtu_lower_slope, Jtu_upper_slope),
@@ -139,13 +139,17 @@ Jtu_rct_density <- ggplot() +
   xlab('Taxa-level turnover') +
   theme(panel.grid = element_blank(),
         legend.key = element_blank(),
-        legend.position = c(0.7, 0.7),
+        legend.position = c(0.7, 0.6),
         legend.direction = 'vertical',
-        axis.text.y = element_text(colour = lat_colour)) +
+        legend.text = element_text(size = 14),
+        legend.title = element_text(size = 15),
+        axis.text.y = element_text(size = 14, colour = lat_colour),
+        axis.text.x = element_text(size = 14),
+        axis.title = element_text(size = 15)) +
   guides(fill = guide_legend(override.aes = list(alpha = 1)))
 
 cowplot::plot_grid(Jtu_biome_taxa_density, Jtu_rct_density, ncol = 2, rel_widths = c(1, 0.7), labels = 'auto')
-# ggsave('Jtu_taxa_density_2models.pdf', width = 400, height = 300, units = 'mm')
+# ggsave('Fig4_textSize.pdf', width = 400, height = 300, units = 'mm')
 
 taxa_col = c('All' = '#e6f598',
              'Amphibians' = '#fee08b',

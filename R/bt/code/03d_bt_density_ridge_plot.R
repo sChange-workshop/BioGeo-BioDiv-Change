@@ -247,8 +247,11 @@ S_biome_taxa_density <- ggplot() +
                       aes(x = S_taxa_coef, y = reorder(Biome, S_taxa_coef),
                           fill = taxa_mod2, linetype = REALM),
                       lwd = 0.2, scale = 1, alpha = 0.6) +
-  scale_fill_manual(name = 'Taxa', values = taxa_col2) +
-  scale_linetype_manual(name = 'Realm', values = c('Marine' = 0, 'Terrestrial' = 1, 'Freshwater' = 3)) +
+  scale_fill_manual(name = 'Taxa', values = taxa_col2,
+                    guide = guide_legend(title.position = 'top')) +
+  scale_linetype_manual(name = 'Realm', values = c('Marine' = 0, 'Terrestrial' = 1, 'Freshwater' = 3),
+                        guide = guide_legend(title.position = 'top', override.aes = list(fill = 'White'),
+                                             nrow = 2)) +
   scale_y_discrete(labels = scales::wrap_format(30), expand = c(0.01, 0, 0.02, 0)) +
   geom_vline(data = biome_sample_posterior,
              aes(xintercept = unique(S_global))) +
@@ -257,17 +260,18 @@ S_biome_taxa_density <- ggplot() +
   ylab('Biome') + 
   xlab('Taxa-level species richness change estimate') +
   theme(panel.grid = element_blank(),
-        axis.text.y = element_text(size = 9, lineheight = .7, colour = biome_colour),
+        axis.text.y = element_text(size = 10, lineheight = .7, colour = biome_colour),
+        axis.text.x = element_text(size = 14),
+        axis.title = element_text(size = 15),
         legend.key = element_blank(),
         legend.direction = 'horizontal',
         legend.position = 'top',
-        legend.margin = margin(),
-        legend.justification = 0) +
-  guides(linetype = guide_legend(override.aes = list(fill = 'White'),
-                                 nrow = 2))
+        # legend.justification = 'left',
+        legend.text = element_text(size = 11),
+        legend.title = element_text(size = 11)) 
 
 
-Jtu_order <- with(Jtu_bt_sample_posterior, reorder(Biome, Jtu_taxa_coef))
+S_biomJtu_order <- with(Jtu_bt_sample_posterior, reorder(Biome, Jtu_taxa_coef))
 
 Jtu_biome_lab_colour <- Jtu_bt_sample_posterior %>% 
   distinct(Biome, climate_mod) %>% 
@@ -289,20 +293,24 @@ Jtu_biome_taxa_density <- ggplot() +
   geom_vline(data = Jtu_bt_sample_posterior,
              aes(xintercept = unique(Jtu_global))) +
   geom_vline(xintercept = 0, lty = 2, lwd = 0.5) +
-  scale_fill_manual(name = 'Taxa', values = taxa_col2) +
+  scale_fill_manual(name = 'Taxa', values = taxa_col2,
+                    guide = guide_legend(title.position = 'top')) +
   scale_linetype_manual(name = 'Realm', values = c('Marine' = 0, 'Terrestrial' = 1, 'Freshwater' = 3)) +
   scale_y_discrete(labels = scales::wrap_format(30), expand = c(0.01, 0, 0.02, 0)) +
   theme_bw() +
   ylab('Biome') +
   xlab('Taxa-level turnover') +
   theme(panel.grid = element_blank(),
-        axis.text.y = element_text(size = 9, lineheight = .7, colour = Jtu_colour),
+        axis.text.y = element_text(size = 10, lineheight = .7, colour = Jtu_colour),
+        axis.text.x = element_text(size = 14),
+        axis.title = element_text(size = 15),
         legend.key = element_blank(),
         legend.direction = 'horizontal',
         legend.position = 'top',
-        legend.margin = margin(),
-        legend.justification = 0) +
-  guides(linetype = guide_legend(override.aes = list(fill = 'White'),
+        legend.justification = 'left',
+        legend.text = element_text(size = 11),
+        legend.title = element_text(size = 11)) +
+  guides(linetype = guide_legend(title.position = 'top', override.aes = list(fill = 'White'),
                                  nrow = 2))
 
 

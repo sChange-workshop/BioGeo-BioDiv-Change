@@ -138,7 +138,7 @@ top2 <- cowplot::plot_grid(alpha_beta_scatter, a_b_summary_plot, nrow = 1, align
 top <- cowplot::plot_grid(top1, alpha_beta_scatter, a_b_summary_plot, nrow = 1, axis = 't')
 
 # save without map
-# ggsave('alpha_beta_taxaAllPoints_noMap.pdf', width = 350, height = 150, units = 'mm')
+# ggsave('Fig5_noMap.pdf', width = 350, height = 150, units = 'mm')
 # run code to generate alpha_beta_map
 
 cowplot::plot_grid(top, alpha_beta_map, ncol = 1, rel_heights = c(0.5,0.9))
