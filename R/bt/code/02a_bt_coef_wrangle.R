@@ -8,6 +8,18 @@ library(broom)
 
 ##-----load coefficient estimates with new biomes--------------
 load('~/Dropbox/BiogeoBioTIME/Nature_Manuscript/R/bt/model_fits_output/BTRfyID_coef_ranef_160818.Rdata')
+# plus the coefficients and random effects from the beta regression models 
+load('~/Desktop/BT_betaR_coef_ranef.Rdata')
+
+# join beta regression estimates to the others
+BT_global_estimates <- bind_rows(BT_global_estimates, BT_betaR_global_estimates)
+BT_biome_estimate <- bind_rows(BT_biome_estimate, BT_betaR_biome_estimate)
+BT_taxa_estimate <- bind_rows(BT_taxa_estimate, BT_betaR_taxa_estimate)
+BTRfyID_rarefyID_coef <- bind_rows(BTRfyID_rarefyID_coef, BT_betaR_rarefyID_coef)
+
+BT_biome_ranef <- bind_rows(BT_biome_ranef, BT_betaR_biome_ranef)
+BT_Taxa_ranef <- bind_rows(BT_Taxa_ranef, BT_betaR_taxa_ranef)
+BT_rarefyID_ranef <- bind_rows(BT_rarefyID_ranef, BT_betaR_rarefyID_ranef)
 ##----- get raw data and process for metadata--------
 load('~/Dropbox/BiogeoBioTIME/rarefied_medians.Rdata')  
 
@@ -94,11 +106,9 @@ BTRfyID_meta <- rarefied_medians %>%
 ##-------wrangle global level estimates-----------
 BT_global_estimates$model_clean <- BT_global_estimates$model
 BT_global_estimates$model_clean <- factor(BT_global_estimates$model_clean, 
-                                          levels = c('S_pois', 'Jbeta_norm', 'Jtu_norm', 'Jne_norm', 'N_lognorm', 'ENSPIE_pois'),
-                                          labels = c('Species richness', 'Total dissimilarity',  'Turnover component','Nestedness component',
-                                                     'Abundance (N)', 'ENSPIE'))
-
-
+                                          levels = c('S_pois', 'Jbeta_norm', 'Jtu_norm', 'Jtu_z1i', 'Jne_norm', 'Jne_zi', 'N_lognorm', 'ENSPIE_pois'),
+                                          labels = c('Species richness', 'Total dissimilarity',  'Turnover component', 'Turnover component (z1i)', 'Nestedness component',
+                                                     'Nestedness component (zi)', 'Abundance (N)', 'ENSPIE'))
 
 ##----wrangle biome level-------------
 # combine cell countss and realm meta data with biome estimates 
@@ -114,9 +124,9 @@ BT_biome_estimate <- inner_join(biome_years, BT_biome_estimate, by='Biome')
 BT_biome_estimate <- inner_join(BT_biome_estimate, coords, by='Biome')
 BT_biome_estimate$model_clean <- BT_biome_estimate$model
 BT_biome_estimate$model_clean <- factor(BT_biome_estimate$model_clean, 
-                                        levels = c('S_pois', 'Jbeta_norm','Jtu_norm', 'Jne_norm', 'N_lognorm', 'ENSPIE_pois'),
-                                        labels = c('Species richness', 'Total dissimilarity',  'Turnover component', 'Nestedness component',
-                                                   'Abundance (N)', 'ENSPIE'))
+                                        levels = c('S_pois', 'Jbeta_norm', 'Jtu_norm', 'Jtu_z1i', 'Jne_norm', 'Jne_zi', 'N_lognorm', 'ENSPIE_pois'),
+                                        labels = c('Species richness', 'Total dissimilarity',  'Turnover component', 'Turnover component (z1i)', 'Nestedness component',
+                                                   'Nestedness component (zi)', 'Abundance (N)', 'ENSPIE'))
 
 
 BT_biome_estimate <- BT_biome_estimate %>%
@@ -158,9 +168,9 @@ BT_taxa_estimate <- inner_join(BT_years, BT_taxa_estimate, by=c('Biome', 'taxa_m
 
 BT_taxa_estimate$model_clean <- BT_taxa_estimate$model
 BT_taxa_estimate$model_clean <- factor(BT_taxa_estimate$model_clean, 
-                                       levels = c('S_pois', 'Jbeta_norm', 'Jtu_norm', 'Jne_norm', 'N_lognorm', 'ENSPIE_pois'),
-                                       labels = c('Species richness', 'Total dissimilarity',  'Turnover component', 'Nestedness component',
-                                                  'Abundance (N)', 'ENSPIE'))
+                                       levels = c('S_pois', 'Jbeta_norm', 'Jtu_norm', 'Jtu_z1i', 'Jne_norm', 'Jne_zi', 'N_lognorm', 'ENSPIE_pois'),
+                                       labels = c('Species richness', 'Total dissimilarity',  'Turnover component', 'Turnover component (z1i)', 'Nestedness component',
+                                                  'Nestedness component (zi)', 'Abundance (N)', 'ENSPIE'))
 # repeat for ranef dataframe
 BT_Taxa_ranef <- BT_Taxa_ranef %>%
   mutate(level = Taxa) %>%
@@ -197,9 +207,9 @@ BT_Taxa_ranef <- inner_join(BT_years, BT_Taxa_ranef, by=c('Biome', 'taxa_mod'))
 
 BT_Taxa_ranef$model_clean <- BT_Taxa_ranef$model
 BT_Taxa_ranef$model_clean <- factor(BT_Taxa_ranef$model_clean, 
-                                       levels = c('S_pois', 'Jbeta_norm', 'Jtu_norm', 'Jne_norm', 'N_lognorm', 'ENSPIE_pois'),
-                                       labels = c('Species richness', 'Total dissimilarity',  'Turnover component', 'Nestedness component',
-                                                  'Abundance (N)', 'ENSPIE'))
+                                    levels = c('S_pois', 'Jbeta_norm', 'Jtu_norm', 'Jtu_z1i', 'Jne_norm', 'Jne_zi', 'N_lognorm', 'ENSPIE_pois'),
+                                    labels = c('Species richness', 'Total dissimilarity',  'Turnover component', 'Turnover component (z1i)', 'Nestedness component',
+                                               'Nestedness component (zi)', 'Abundance (N)', 'ENSPIE'))
 
 ##-----need to wrangle the rarefyIDs for plotting--------
 BTRfyID_rarefyID_coef <- BTRfyID_rarefyID_coef %>%
@@ -222,16 +232,16 @@ BTRfyID_rarefyID_coef <- BTRfyID_rarefyID_coef %>%
 
 ##  cell-level metadata with coefficient estimates
 BTRfyID_rarefyID_coef <- inner_join(BTRfyID_meta, BTRfyID_rarefyID_coef, by='rarefyID')
-BTRfyID_rarefyID_coef$model <- factor(BTRfyID_rarefyID_coef$model, level = c('Jbeta_norm', 'Jne_norm', 'Jtu_norm', 'N_lognorm', 'ENSPIE_pois', 'S_pois'))
+BTRfyID_rarefyID_coef$model <- factor(BTRfyID_rarefyID_coef$model, level = c('Jbeta_norm', 'Jne_norm', 'Jtu_norm', 'Jne_zi', 'Jtu_z1i', 'N_lognorm', 'ENSPIE_pois', 'S_pois'))
 # indicator for colour plotting of directional trend
 BTRfyID_rarefyID_coef$change <- factor(BTRfyID_rarefyID_coef$change, level = c('neutral', 'up', 'down'))
 # combine years of time series with coefficient estimates
 BTRfyID_rarefyID_coef <- inner_join(BTRfyID_rarefyID_coef, cell_years %>% select(-Biome, -taxa_mod), by='rarefyID')
 BTRfyID_rarefyID_coef$model_clean <- BTRfyID_rarefyID_coef$model
 BTRfyID_rarefyID_coef$model_clean <- factor(BTRfyID_rarefyID_coef$model_clean, 
-                                            levels = c('S_pois', 'Jbeta_norm',  'Jtu_norm', 'Jne_norm', 'N_lognorm', 'ENSPIE_pois'),
-                                            labels = c('Species richness', 'Total dissimilarity',  'Turnover component', 'Nestedness component',
-                                                       'Abundance (N)', 'ENSPIE'))
+                                            levels = c('S_pois', 'Jbeta_norm', 'Jtu_norm', 'Jtu_z1i', 'Jne_norm', 'Jne_zi', 'N_lognorm', 'ENSPIE_pois'),
+                                            labels = c('Species richness', 'Total dissimilarity',  'Turnover component', 'Turnover component (z1i)', 'Nestedness component',
+                                                       'Nestedness component (zi)', 'Abundance (N)', 'ENSPIE'))
 BTRfyID_rarefyID_coef <- BTRfyID_rarefyID_coef %>%
   mutate(Realm2 = ifelse(REALM!='Marine', 'Terrestrial/Freshwater', 'Marine'))
 

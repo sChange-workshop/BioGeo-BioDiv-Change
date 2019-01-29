@@ -838,6 +838,7 @@ biome_taxa_simpleGeogr_allPoints <- bind_rows(terr_taxa_hullCent_allPoints, mar_
 ab_concept_taxa_plot <- inner_join(taxa_corr %>% 
                                      select(Biome, taxa_mod, deltaJbeta, deltaJbeta_lower, deltaJbeta_upper, 
                                             deltaJne, deltaJne_lower, deltaJne_upper, deltaJtu, deltaJtu_lower,deltaJtu_upper,
+                                            deltaJne_zi, deltaJne_zi_lower, deltaJne_zi_upper, deltaJtu_z1i, deltaJtu_z1i_lower,deltaJtu_z1i_upper,
                                             deltaS, deltaS_lower,deltaS_upper,
                                             quad, alphaS, alphaJtu, alphaJne), 
                                    biome_taxa_simpleGeogr)
@@ -845,6 +846,7 @@ ab_concept_taxa_plot <- inner_join(taxa_corr %>%
 ab_concept_taxa_plot_allPoints <- inner_join(taxa_corr %>% 
                                      select(Biome, taxa_mod, deltaJbeta, deltaJbeta_lower, deltaJbeta_upper, 
                                             deltaJne, deltaJne_lower, deltaJne_upper, deltaJtu, deltaJtu_lower,deltaJtu_upper,
+                                            deltaJne_zi, deltaJne_zi_lower, deltaJne_zi_upper, deltaJtu_z1i, deltaJtu_z1i_lower,deltaJtu_z1i_upper,
                                             deltaS, deltaS_lower,deltaS_upper,
                                             quad, alphaS, alphaJtu, alphaJne),
                                    biome_taxa_simpleGeogr_allPoints)

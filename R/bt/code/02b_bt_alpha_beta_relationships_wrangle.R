@@ -26,6 +26,17 @@ Jne_taxa <- BT_taxa_estimate %>%
          deltaJne_lower,
          deltaJne_upper) 
 
+Jne_zi_taxa <- BT_taxa_estimate %>%
+  # remove duplicate entries created when adding meta data
+  distinct(model, Biome, taxa_mod, Estimate.cYEAR, .keep_all = T) %>%
+  filter(model == 'Jne_zi' & time_period=='ALL') %>%
+  mutate(deltaJne_zi = Estimate.cYEAR,
+         deltaJne_zi_lower = lower_slope,
+         deltaJne_zi_upper = upper_slope) %>%
+  select(deltaJne_zi,
+         deltaJne_zi_lower,
+         deltaJne_zi_upper) 
+
 Jtu_taxa <- BT_taxa_estimate %>%
   # remove duplicate entries created when adding meta data
   distinct(model, Biome, taxa_mod, Estimate.cYEAR, .keep_all = T) %>%
@@ -36,6 +47,17 @@ Jtu_taxa <- BT_taxa_estimate %>%
   select(deltaJtu,
          deltaJtu_lower,
          deltaJtu_upper) 
+
+Jtu_z1i_taxa <- BT_taxa_estimate %>%
+  # remove duplicate entries created when adding meta data
+  distinct(model, Biome, taxa_mod, Estimate.cYEAR, .keep_all = T) %>%
+  filter(model == 'Jtu_z1i' & time_period=='ALL') %>%
+  mutate(deltaJtu_z1i = Estimate.cYEAR,
+         deltaJtu_z1i_lower = lower_slope,
+         deltaJtu_z1i_upper = upper_slope) %>%
+  select(deltaJtu_z1i,
+         deltaJtu_z1i_lower,
+         deltaJtu_z1i_upper)
 
 S_taxa <- BT_taxa_estimate %>%
   # remove duplicate entries created when adding meta data
@@ -52,6 +74,8 @@ taxa_corr <- bind_cols(
   Jbeta_taxa,
   Jne_taxa,
   Jtu_taxa,
+  Jne_zi_taxa,
+  Jtu_z1i_taxa,
   S_taxa
 ) %>%
   separate(Biome, into = c('q', 'r', 's', 't', 'u'), sep = '_', remove = FALSE) %>%
@@ -63,7 +87,8 @@ taxa_corr <- bind_cols(
 
 # add indicator for whether deltaJtu > deltaJne 
 taxa_corr <- taxa_corr %>%
-  mutate(Jtu_grt_Jne = ifelse(deltaJtu > deltaJne, 'Jtu > Jne', 'Jne > Jtu'))
+  mutate(Jtu_grt_Jne = ifelse(deltaJtu > deltaJne, 'Jtu > Jne', 'Jne > Jtu'),
+         Jtu_grt_Jne_beta = ifelse(deltaJtu_z1i > deltaJne_zi, 'Jtu > Jne', 'Jne > Jtu'))
 
 # add another indicator for quadrant conceptual model (four colours: Jne>Jtu & S < 0, Jne>Jtu & S>0, etc)
 taxa_corr <- taxa_corr %>%
