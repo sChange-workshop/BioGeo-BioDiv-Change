@@ -1,5 +1,6 @@
 ##======================================================================
-##  Hierarchical model of species richness fit to studies with count data 
+##  Hierarchical models: fit to either all studies (S, Jaccard), or only those with
+##	count data (N, PIE, etc)
 ##======================================================================
 rm(list=ls())
 
@@ -13,7 +14,7 @@ library(tidyr)
 load('/gpfs1/data/sChange/BioTime/data/rarefied_medians.Rdata')
 
 ##======================================================================		
-##	count cells within biome/taxa hierarchy
+# cell count for a hierarchy that includes study
 cell_count <- rarefied_medians %>%
         group_by(Biome, taxa_mod) %>%
         dplyr::summarise(n_cells = n_distinct(rarefyID)) %>%
@@ -22,25 +23,29 @@ cell_count <- rarefied_medians %>%
 ##	rejoin
 rarefied_medians <- left_join(cell_count, rarefied_medians, by=c('Biome','taxa_mod'))
 
-##	filter to groups with >3 cells
+##	filter to ecoregions with >3 cells
 rarefied_medians <- rarefied_medians %>%
+	ungroup() %>%
 	filter(BROAD_TYPE == 'count') %>%
-        filter(n_cells > 3) 
+        filter(n_cells > 3)
 
 ##	set some weakly regularising priors...
-hier_prior <- c(set_prior(prior = 'normal(0,2)', class='b', coef='cYEAR'), 	# global slope
-                set_prior(prior = 'normal(0,5)', class='Intercept', coef=''), 		        # global intercept
-                set_prior(prior = 'student_t(1,0,10)', class='sd'),							            # group-level intercepts and slopes
-                set_prior(prior = 'lkj(2)', class='cor'))                                 # parameter for covariance matrix
+hier_prior <- c(set_prior(prior = 'normal(0,0.2)', class='b', coef='cYEAR'), 	# global slope
+	set_prior(prior = 'normal(0,1)', class='Intercept', coef=''), 		# global intercept
+	#set_prior(prior = 'exponential(1)', class = 'sd'),
+	set_prior(prior = 'lkj(1)', class='cor')
+)
 
-S_pois_ln_BTRfyID_countData <- brm(bf(S ~ cYEAR + (cYEAR|Biome/taxa_mod/rarefyID) + (1|obsID), 
+S_pois_BTSRfyID_countData <- brm(bf(S ~ cYEAR + (cYEAR|Biome/taxa_mod/STUDY_ID/rarefyID), 
 	family = brmsfamily('poisson')),	
 	data= rarefied_medians,
 	prior=hier_prior,
 	iter = 2000,
+	warmup = 1000,
 	inits = '0',
+	#init_r = 0.001,
 	control = list(adapt_delta=0.95),
 	cores = 4,
 	chains = 4)
 
-save(S_pois_ln_BTRfyID_countData, file=Sys.getenv('OFILE'))
+save(S_pois_BTSRfyID_countData, file=Sys.getenv('OFILE'))
