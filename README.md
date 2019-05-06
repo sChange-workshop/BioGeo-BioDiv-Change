@@ -1,20 +1,20 @@
 # BioGeo-BioDiv-Change
 
-This repository contains code necessary to replicate data analysis, figures, and tables for the sChange Working Group manuscript "Biodiversity trends are stronger in marine than terrestrial assemblages".
+This repository contains code necessary to replicate data analysis, figures, and tables for the sChange Working Group manuscript "The comparative strength of biodiversity trends in marine and terrestrial assemblages".
 
 It is archived on Zenodo at : https://doi.org/10.5281/zenodo.1473861
 
 We use the new BioTIME database [Dornelas et al. 2018](https://doi.org/10.1111/geb.12729) to analyze community time-series datasets that record species identity, abundance, and richness. Here, we synthesize millions of biodiversity records from taxa and biomes across the globe, to estimate rates of diversity change (species richness, ENSPIE) and species turnover (composition, abundance) through time. We ask:
 
-1. Across the sites, what is the overall of species richness change, and the turnover component of Jaccard's dissimilarity?
-2. What are the spatial distribution of patterns of biodiversity change, across realms, biomes, latitudinal bands and taxa?
-3. (How) is richness change related to changes in community composition?
+1. How are the numbers of species and community composition of local assemblages changing through time?
+2. What are the patterns in the distribution of change? Across realms? Biomes? Latitudinal bands? Taxa?
+3. Do patterns emerge between changes in species number and changes in compositional dissimilarity?
 
 **Disclaimer:** The project and related code in this repository represent one version of the code developed for the project, and may yet undergo changes and revisions.
 
-**Authors:** Shane Blowes and Sarah Supp will share first authorship. Maria Dornelas is senior author on the paper. 
-Collaborators include the sChange Working Group, funded by iDiv in Leipzig, Germany:
-Laura Antao, Amanda Bates, Helge Bruelheide, Jon Chase, Faye Moyes, Anne Magurran, Brian McGill, Isla Myers-Smith, Marten Winter, Anne Bjorkman, Diana Bowler, Jarrett E.K. Byrnes, Andrew Gonzalez, Jes Hines, Forest Isbell, Holly Jones, Laetitia M. Navarro, Patrick Thompson, Mark Vellend, Conor Waldock.
+**Authors:**  This work was developed through collaboration initiated during sChange Working Group meetings funded by iDiv in Leipzig, Germany.
+Shane Blowes and Sarah Supp share first authorship. Maria Dornelas is senior author on the paper.
+Working group participants: Laura Antao, Amanda Bates, Helge Bruelheide, Jon Chase, Faye Moyes, Anne Magurran, Brian McGill, Isla Myers-Smith, Marten Winter, Anne Bjorkman, Diana Bowler, Jarrett E.K. Byrnes, Andrew Gonzalez, Jes Hines, Forest Isbell, Holly Jones, Laetitia M. Navarro, Patrick Thompson, Mark Vellend, Conor Waldock.
 
 **Contacts:** 
 * Shane Blowes - sablowes@gmail.com
@@ -23,7 +23,7 @@ Laura Antao, Amanda Bates, Helge Bruelheide, Jon Chase, Faye Moyes, Anne Magurra
 
 ## Data 
 
-The time series analysed were from 332 unique references found in the BioTIME dataset and in other studies which were used with permission.
+The time series analysed were from 239 unique references found in the BioTIME dataset and in other studies which were used with permission.
 
 Approximately 92% (306 references) of the biodiversity studies analysed here are available as part of the published BioTIME Database28. The data are openly available, and can be accessed on Zenodo (https://doi.org/10.5281/zenodo.1211105) or through the BioTIME website (http://biotime.st-andrews.ac.uk/).
 

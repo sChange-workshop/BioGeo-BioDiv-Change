@@ -10,9 +10,9 @@ library(tibble)
 
 #----load data
 ##----count data only, whole time period--------
-load('~/Desktop/revision_models/Jtu_norm_BTRfyIDBTSRfyID_count_61div.Rdata')
+load('~/Desktop/revision_models/Jtu_norm_BTSRfyID_count.Rdata')
 load('~/Desktop/revision_models/Jne_norm_BTSRfyID_count-4950633.Rdata')
-load('~/Desktop/revision_models/S_pois_BTSRfyID_expPrior_36div.Rdata')
+load('~/Desktop/revision_models/S_pois_BTSRfyID_count-5050747.Rdata')
 
 
 ##--species richness coefficients and random effects---------

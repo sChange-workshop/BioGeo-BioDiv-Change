@@ -67,23 +67,39 @@ rm(bt_grid_filtered)
 hist_duration <- ggplot() +
   geom_histogram(data = newdat %>% distinct(rarefyID, .keep_all = T),
                  aes(x = duration),
-                 binwidth = 2) +
+                 binwidth = 1) +
   scale_x_continuous(name = 'Duration of sampling (years)',
-                     breaks = c(2,4,8,16,32,48,64,96),
+                     breaks = c(2,3,4,8,16,32,48,64,96),
                      #position = 'top'
-                     labels = c(2,4,8,16,32,48,64,96)) +
+                     labels = c('',3,4,8,16,32,48,64,96)) +
   # scale_y_continuous('Number of cells',
   #                    breaks = c(30000, 20000, 10000)) +
   # ylim(c(12000, 0)) +
   theme_bw() +
-  theme(panel.grid.minor.y = element_blank()#,
+  theme(panel.grid.minor = element_blank()#,
         # axis.title.y.right = element_text(angle = 90)
         ) + 
   labs(tag = 'C',
        y = 'Number of cells') #+
   # coord_flip() 
 
-
+ggplot() +
+  geom_histogram(data = newdat %>% distinct(rarefyID, .keep_all = T) %>% 
+                   filter(num_years==2),
+                 aes(x = duration), binwidth = 1) +
+  scale_x_continuous(name = 'Duration (years)',
+                     breaks = c(2,3,4,8,16,32,48),
+                     labels = c('',3,4,8,16,32,48)) +
+  scale_y_continuous(name = 'Number of cells',
+                     breaks = c(0, 500, 1000, 1500, 2000)) +
+  labs(subtitle = 'Duration when number of years sampled = 2') +
+  theme_classic() +
+  theme(panel.grid.minor = element_blank(),
+        axis.text = element_text(size = 14),
+        axis.title = element_text(size = 14),
+        plot.subtitle = element_text(size = 14)) 
+ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science Rev_2/figures/duration_when_num_years_two.png',
+       width = 150, height = 150, units = 'mm')
 hist_numYears <- ggplot() +
   geom_histogram(data = newdat %>% distinct(rarefyID, .keep_all = T),
                  aes(x = num_years),
