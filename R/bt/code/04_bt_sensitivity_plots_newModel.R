@@ -185,3 +185,23 @@ cowplot::plot_grid(bt_numYears, bt_duration,
 # ggsave('FigSx_bt_cell-level_slope_sensitivity_lm.png', width = 400, height = 400, units = 'mm')
 
 
+# plot the correlogram for cell-level slopes
+library(pgirmess)
+coords <- cbind(bt_rarefyID_coef %>% 
+                  filter(model=='S_pois_new') %>% 
+                  .$rarefyID_x,
+                bt_rarefyID_coef %>% 
+                  filter(model=='S_pois_new') %>% 
+                  .$rarefyID_y)
+names(coords) <- c('x', 'y')
+library(ncf)
+S_correlog <- ncf::correlog(coords$x, coords$y, 
+                            bt_rarefyID_coef %>% 
+                              filter(model=='S_pois_new') %>% 
+                              .$Estimate.cYEAR,
+                    increment=2, resamp=1)
+S_correlog <- correlog(coords=, 
+                 z=bt_rarefyID_coef %>% 
+                   filter(model=='S_pois_new') %>% 
+                   .$Estimate.cYEAR,
+                 method="Moran")

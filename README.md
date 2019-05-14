@@ -34,7 +34,7 @@ The remaining 8% (26 references) of biodiversity studies analysed were used with
 
 ## R Analysis Files 
 
-These scripts prepare the data for analysis. First (01), studies with large extents are consolidated into equal area grids, and studies with only one geographical location (or small extents) are similarly gridded. Species in these new cell-level time series are aggregated within years, and the coverage (or sample completeness) for each cell-year combination calculated, and all cell-year combinations with coverage < 0.85 are discarded. Second (02), we apply sample-based rarefaction to these new cell-level time series, and calculate diversity metrics (03) as the median of 199 bootstrap rarefactions. Finally (04), we rejoin our rarefied diversity metrics with metadata ready for fitting models.
+These scripts prepare the data for analysis. First (01), studies with large extents are consolidated into equal area grids, and studies with only one geographical location (or small extents) are similarly gridded. Species in these new cell-level time series are aggregated within years, and the coverage (or sample completeness) for each cell-year combination calculated, and all cell-year combinations with coverage < 0.85 are discarded. Second (02), we apply sample-based rarefaction to these new cell-level time series, and calculate diversity metrics (03) as the median of 199 bootstrap rarefactions. (04) Rejoin  rarefied diversity metrics with metadata ready for fitting models. (05) code to make plots for visual inspection of the data (e.g., Fig. S2).
 
 Please note that the majority of the code herein was written to run on a HPC cluster.
 
@@ -42,6 +42,7 @@ Please note that the majority of the code herein was written to run on a HPC clu
 * 02rarefy_griddedData_clusterVersion.R 
 * 03collate_rarefied_resamps_median.R
 * 04meta_join.R
+* 05_visualise_data.R
 
 **bt folder** - biome-taxa model
 * **code**

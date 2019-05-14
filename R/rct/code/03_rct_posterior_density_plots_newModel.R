@@ -72,64 +72,36 @@ study_sample_posterior <- study_sample_posterior %>%
   unite(lat_realm, c(Latitude, Realm), remove = F, sep = ' ')
 
 study_sample_posterior$lat_realm <- factor(study_sample_posterior$lat_realm, 
-                                         levels = c('Tropical Marine',
-                                                    'Tropical Terrestrial',
-                                                    'Temperate Freshwater',
-                                                    'Temperate Marine',
-                                                    'Temperate Terrestrial',
-                                                    'Polar Freshwater',
-                                                    'Polar Marine',
-                                                    'Polar Terrestrial'),
-                                         labels = c('Tropical (marine)',
-                                                    'Tropical (terrestrial)',
-                                                    'Temperate (freshwater)',
-                                                    'Temperate (marine)',
-                                                    'Temperate (terrestrial)',
-                                                    'Polar (freshwater)',
-                                                    'Polar (marine)',
-                                                    'Polar (terrestrial)'))
+                                         levels = c('Tropical Marine', 'Tropical Terrestrial', 'Temperate Freshwater',
+                                                    'Temperate Marine', 'Temperate Terrestrial', 'Polar Freshwater',
+                                                    'Polar Marine', 'Polar Terrestrial'),
+                                         labels = c('Tropical (marine)', 'Tropical (terrestrial)', 'Temperate (freshwater)',
+                                                    'Temperate (marine)', 'Temperate (terrestrial)', 'Polar (freshwater)',
+                                                    'Polar (marine)', 'Polar (terrestrial)'))
 
 # make a new lat_taxa label your plotting 
 study_sample_posterior <- study_sample_posterior %>%
   unite(lat_taxa, c(Latitude, Taxa), remove = F, sep = ' ')
 # 
 study_sample_posterior$lat_taxa <- factor(study_sample_posterior$lat_taxa,
-                                          levels = c('Tropical Birds',
-                                                     'Tropical Fish',
-                                                     'Tropical Invertebrates',
-                                                     'Tropical Plant',
-                                                     'Temperate All',
-                                                     'Temperate Amphibians',
-                                                     'Temperate Benthos',
-                                                     'Temperate Birds',
-                                                     'Temperate Fish',
-                                                     'Temperate Invertebrates',
-                                                     'Temperate Mammals',
-                                                     'Temperate Plant',
-                                                     'Polar Benthos',
-                                                     'Polar Birds',
-                                                     'Polar Fish',
-                                                     'Polar Invertebrates',
-                                                     'Polar Mammals',
-                                                     'Polar Plant'),
-                                           labels = c('Tropical Birds',
-                                                      'Tropical Fish',
-                                                      'Tropical Invertebrates',
-                                                      'Tropical Plants',
-                                                      'Temperate multiple taxa',
-                                                      'Temperate Amphibians',
-                                                      'Temperate Benthos',
-                                                      'Temperate Birds',
-                                                      'Temperate Fish',
-                                                      'Temperate Invertebrates',
-                                                      'Temperate Mammals',
-                                                      'Temperate Plants',
-                                                      'Polar Benthos',
-                                                      'Polar Birds',
-                                                      'Polar Fish',
-                                                      'Polar Invertebrates',
-                                                      'Polar Mammals',
-                                                      'Polar Plants'))
+                                          levels = c('Tropical Birds', 'Tropical Fish',
+                                                     'Tropical Invertebrates', 'Tropical Plant',
+                                                     'Temperate All', 'Temperate Amphibians',
+                                                     'Temperate Benthos', 'Temperate Birds',
+                                                     'Temperate Fish', 'Temperate Invertebrates',
+                                                     'Temperate Mammals', 'Temperate Plant',
+                                                     'Polar Benthos', 'Polar Birds',
+                                                     'Polar Fish', 'Polar Invertebrates',
+                                                     'Polar Mammals', 'Polar Plant'),
+                                           labels = c('Tropical Birds', 'Tropical Fish',
+                                                      'Tropical Invertebrates', 'Tropical Plants',
+                                                      'Temperate multiple taxa', 'Temperate Amphibians',
+                                                      'Temperate Benthos', 'Temperate Birds',
+                                                      'Temperate Fish', 'Temperate Invertebrates',
+                                                      'Temperate Mammals', 'Temperate Plants',
+                                                      'Polar Benthos', 'Polar Birds',
+                                                      'Polar Fish', 'Polar Invertebrates',
+                                                      'Polar Mammals', 'Polar Plants'))
 
 study_sample_posterior$Realm <- factor(study_sample_posterior$Realm,
                                      levels = c('Freshwater', 'Terrestrial', 'Marine'))
@@ -141,22 +113,13 @@ rct_sample_posterior <- rct_sample_posterior %>%
   unite(lat_realm, c(Latitude, Realm), remove = F, sep = ' ')
 
 rct_sample_posterior$lat_realm <- factor(rct_sample_posterior$lat_realm, 
-                                         levels = c('Tropical Marine',
-                                                    'Tropical Terrestrial',
-                                                    'Temperate Freshwater',
-                                                    'Temperate Marine',
-                                                    'Temperate Terrestrial',
-                                                    'Polar Freshwater',
-                                                    'Polar Marine',
-                                                    'Polar Terrestrial'),
-                                         labels = c('Tropical (marine)',
-                                                    'Tropical (terrestrial)',
-                                                    'Temperate (freshwater)',
-                                                    'Temperate (marine)',
-                                                    'Temperate (terrestrial)',
-                                                    'Polar (freshwater)',
-                                                    'Polar (marine)',
-                                                    'Polar (terrestrial)'))
+                                         levels = c('Tropical Marine', 'Tropical Terrestrial', 'Temperate Freshwater',
+                                                    'Temperate Marine', 'Temperate Terrestrial', 'Polar Freshwater',
+                                                    'Polar Marine', 'Polar Terrestrial'),
+                                         labels = c('Tropical (marine)', 'Tropical (terrestrial)',
+                                                    'Temperate (freshwater)', 'Temperate (marine)',
+                                                    'Temperate (terrestrial)', 'Polar (freshwater)',
+                                                    'Polar (marine)', 'Polar (terrestrial)'))
 
 rct_sample_posterior$Realm <- factor(rct_sample_posterior$Realm,
                                      levels = c('Freshwater', 'Terrestrial', 'Marine'))
@@ -174,18 +137,46 @@ study_sample_posterior$taxa2 <- factor(study_sample_posterior$Taxa,
                                                 "Multiple taxa", "Marine invertebrates/plants", "Mammals"))
 
 # colour the taxa
-taxa_col = c('Multiple taxa' = '#e6f598',
-             'Amphibians' = '#fee08b',
-             'Benthos' = '#5e4fa2',
-             'Birds' = '#f46d43',
-             'Fish' = '#3288bd',
-             'Invertebrates' = '#abdda4',
-             'Mammals' = '#9e0142',
-             'Marine invertebrates/plants' = '#66c2a5',
+taxa_col = c('Multiple taxa' = '#e6f598', 'Amphibians' = '#fee08b',
+             'Benthos' = '#5e4fa2', 'Birds' = '#f46d43',
+             'Fish' = '#3288bd', 'Invertebrates' = '#abdda4',
+             'Mammals' = '#9e0142', 'Marine invertebrates/plants' = '#66c2a5',
              'Plants' = '#fdae61')
 
 
 rm(S_pois_RCTSRfyID, Jtu_norm_RCTSRfyID)
+
+# Want to know how many studies in each group 
+load('~/Dropbox/BiogeoBioTIME/rarefied_medians.Rdata')
+
+##	create new covariate that is concatenation of realm_climate_taxa
+rarefied_medians <- rarefied_medians %>%
+  unite(rlm_clm_txa, REALM, climate_mod, taxa_mod, remove=FALSE)
+
+##	count cells within realm/climate/taxa hierarchy
+cell_count <- rarefied_medians %>%
+  group_by(rlm_clm_txa) %>%
+  dplyr::summarise(n_cells = n_distinct(rarefyID)) %>%
+  ungroup() 
+
+##	rejoin
+rarefied_medians <- left_join(cell_count, rarefied_medians, by='rlm_clm_txa')  # cell_count_alt[,c(1,5)]
+
+##	filter to ecoregions with >3 cells
+rarefied_medians <- rarefied_medians %>%
+  filter(n_cells > 3 & BROAD_TYPE=='count')
+
+# count studies for figure 2b and 4b
+study_count <- rarefied_medians %>% 
+  rename(Realm = REALM,
+         Latitude = climate_mod) %>% 
+  group_by(Realm, Latitude) %>% 
+  summarise(n.study = n_distinct(STUDY_ID)) %>% 
+  bind_rows(
+    tibble(Realm = 'Freshwater',
+           Latitude = 'Tropical',
+           n.study = 0)
+  )
 ##----plot preliminary-----
 # i want a separate legend
 source('~/Dropbox/1current/R_random/functions/gg_legend.R')
@@ -254,13 +245,46 @@ ggplot() +
         strip.background = element_blank(),
         strip.text = element_text(size = 14),#
         axis.text.x = element_text(size = 13),# vjust = 0.8, angle = 30),
-        axis.text.y = element_text(size = 13),
+        axis.text.y = element_text(size = 13, vjust = 0),
         axis.title = element_text(size = 15)) #+
   # guides(fill = guide_legend(ncol = 1, keywidth = 0.5, keyheight = 0.5, override.aes = list(alpha = 1)), 
   #        linetype = guide_legend(override.aes = list(fill = 'White')))
 
 
-s_rct_study_p2 <-ggplot() +
+# make legend for insetting
+three_grey_legend <- ggplot() +
+  facet_wrap(~Latitude) +
+  geom_rect(data = study_sample_posterior %>% distinct(S_lower_slope, S_upper_slope, Latitude),
+            aes(xmin = S_lower_slope, xmax = S_upper_slope), ymin = -Inf, ymax = Inf,
+            alpha = 0.3) +
+  geom_density_ridges_gradient(data = study_sample_posterior,
+                               aes(x = S_posteriorSamp + unique(S_global_slope), y = Realm, 
+                                   fill = stat(quantile)
+                               ),
+                               linetype = 0,
+                               scale = 0.95, alpha = 0.6,
+                               calc_ecdf = T,
+                               quantiles = c(0.75, 0.95)) +
+  scale_fill_manual(name = 'Posterior\nprobability',
+                    values = c('#cccccc', '#969696', '#636363'),
+                    labels = c('< 10%', '10-40%', '50%')) +
+  theme(panel.grid = element_blank(),
+        legend.key = element_blank(),
+        legend.position = c(1,0), legend.justification = c(1,0),
+        legend.background = element_blank(),
+        strip.background = element_blank(),
+        strip.text = element_text( size = 14),#
+        # strip.text = element_blank(),
+        axis.text = element_text(size = 13),
+        axis.title = element_text(size = 15)
+  ) +
+  guides(fill = guide_legend(keywidth = 0.7, keyheight = 0.7,
+                             # override.aes = list(alpha = 1),
+                             ncol = 1))
+
+inset_legend <- gg_legend(three_grey_legend)
+
+s_rct_study_p2 <- ggplot() +
   facet_wrap(~Latitude) +
   geom_rect(data = study_sample_posterior %>% distinct(S_lower_slope, S_upper_slope, Latitude),
             aes(xmin = S_lower_slope, xmax = S_upper_slope), ymin = -Inf, ymax = Inf,
@@ -284,6 +308,11 @@ s_rct_study_p2 <-ggplot() +
   geom_vline(data = rct_sample_posterior,
              aes(xintercept = S_global_slope)) +
   geom_vline(xintercept = 0, lty = 2) +
+  geom_text(data = study_count,
+            aes(x=-0.22, y=Realm, 
+                label=paste('n[study] == ', n.study)),
+            size=3.5,
+            nudge_y = 0.1, parse = T) +
   theme_bw() +
   labs(y = 'Realm',
        x = 'Study-level species richness change [log(S)/yr]',
@@ -291,24 +320,38 @@ s_rct_study_p2 <-ggplot() +
   scale_y_discrete(labels = scales::wrap_format(12), expand = c(0.05,0,0.1,0)) +
   theme(panel.grid = element_blank(),
         legend.key = element_blank(),
-        legend.position = c(0,1), legend.justification = c(0,1),
+        legend.position = 'none',
         legend.background = element_blank(),
         strip.background = element_blank(),
         strip.text = element_text( size = 14),#
         # strip.text = element_blank(),
         axis.text = element_text(size = 13),
+        axis.text.y = element_text(size = 13, vjust = 0),
         axis.title = element_text(size = 15)
         ) +
   guides(fill = guide_legend(keywidth = 0.75, keyheight = 0.75,
                              # override.aes = list(alpha = 1),
                              ncol = 1))
 
-# cowplot::plot_grid(s_rct_study_p2 + annotation_custom(probability_legend, 
-#                                                       xmin = -0.3, xmax = -0.2, ymin = 3, ymax = 4))
+annotation_custom2 <- function (grob, xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf, data) {
+  layer(data = data, stat = StatIdentity, position = PositionIdentity, 
+        geom = ggplot2:::GeomCustomAnn,
+        inherit.aes = TRUE, params = list(grob = grob, 
+                                          xmin = xmin, xmax = xmax, 
+                                          ymin = ymin, ymax = ymax))
+}
+
 top <- cowplot::plot_grid(NULL, taxa_legend, NULL, nrow = 1)
-bottom <- cowplot::plot_grid(s_rct_p1, s_rct_study_p2, align = 'hv', nrow = 2)
+bottom_inset <- cowplot::plot_grid(s_rct_study_p2 + 
+                                     annotation_custom2(inset_legend,
+                                                        data = data.frame(Realm = 'Freshwater',
+                                                                          Latitude = 'Tropical',
+                                                                          x = 0, y = 3), 
+                                                       xmin = 0.1, xmax = Inf, ymin = -Inf, ymax = 2))
+
+bottom <- cowplot::plot_grid(s_rct_p1, bottom_inset, align = 'hv', nrow = 2)
 cowplot::plot_grid(top, bottom, nrow = 2, rel_heights = c(0.1,1))
-ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science Rev_2/figures/Fig2_alt1.png', width = 200, height = 200, units = 'mm')
+ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science Rev_2/figures/Fig2_alt1.png', width = 230, height = 230, units = 'mm')
 
 # Jtu_rct_density <- 
 jtu_rct_p1 <-
@@ -343,7 +386,7 @@ jtu_rct_p1 <-
         strip.background = element_blank(),
         strip.text = element_text( size = 14),#hjust = 0,
         axis.text.x = element_text(size = 13),# vjust = 0.8, angle = 30),
-        axis.text.y = element_text(size = 13),
+        axis.text.y = element_text(size = 13, vjust = 0),
         axis.title = element_text(size = 15))
 
 
@@ -369,6 +412,11 @@ jtu_study_p2 <- ggplot() +
   geom_vline(data = rct_sample_posterior,
              aes(xintercept = Jtu_global_slope)) +
   geom_vline(xintercept = 0, lty = 2, lwd = 0.5) +
+  geom_text(data = study_count,
+            aes(x=-0.04, y=Realm, 
+                label=paste('n[study] == ', n.study)),
+            size=3.5,
+            nudge_y = 0.3, parse = T) +
   scale_y_discrete(labels = scales::wrap_format(12), expand = c(0.05, 0, 0.12, 0)) +
   theme_bw() +
   labs(y = 'Realm',
@@ -376,20 +424,29 @@ jtu_study_p2 <- ggplot() +
        tag = 'B') +
   theme(panel.grid = element_blank(),
         legend.key = element_blank(),
-        legend.position = c(1,0), legend.justification = c(1,0),
+        legend.position = 'none', #c(1,0), legend.justification = c(1,0),
         legend.background = element_blank(),
         strip.background = element_blank(),
         strip.text = element_text(size = 14),#hjust = 0, 
         axis.text.x = element_text(size = 13),# vjust = 0.8, angle = 30),
-        axis.text.y = element_text(size = 13),
+        axis.text.y = element_text(size = 13, vjust = 0),
         axis.title = element_text(size = 15)) +
   guides(fill = guide_legend(keywidth = 0.6, keyheight = 0.6,
                              # override.aes = list(alpha = 1),
                              ncol = 1))
 
-bottom <- cowplot::plot_grid(jtu_rct_p1, jtu_study_p2, align = 'hv', nrow = 2)
+
+bottom_inset2 <- cowplot::plot_grid(jtu_study_p2 + 
+                                     annotation_custom2(inset_legend,
+                                                        data = data.frame(Realm = 'Freshwater',
+                                                                          Latitude = 'Tropical',
+                                                                          x = 0, y = 3), 
+                                                        xmin = 0.1, xmax = Inf, ymin = -Inf, ymax = 2))
+
+bottom <- cowplot::plot_grid(jtu_rct_p1, bottom_inset2, align = 'hv', nrow = 2)
 cowplot::plot_grid(top, bottom, nrow = 2, rel_heights = c(0.1,1))
-ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science Rev_2/figures/Fig4_alt1.png', width = 200, height = 200, units = 'mm')
+ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science Rev_2/figures/Fig4_alt1.png', 
+       width = 230, height = 230, units = 'mm')
 
 s_study_rct_taxa_lat <- 
   ggplot() +
