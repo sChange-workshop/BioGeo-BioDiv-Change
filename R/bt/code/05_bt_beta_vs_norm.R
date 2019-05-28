@@ -2,7 +2,7 @@
 rm(list=ls())
 library(tidyverse)
 library(ggridges)
-load('~/Dropbox/1current/BioTime/local_code/hierarchical/6results/bt/model_coefs_ranefs/BTRfyID_coef_ranef_inclNewModel.Rdata')
+load('~/Dropbox/1current/BioTime/BioGeo-BioDiv-Change/R/bt/model_fits_output/BT_model_coef_ranef.Rdata')
 
 # get the z1i Jtu model too...
 load('~/Desktop/revision_models/Jtu_z1i_realm_BTSRfyID_count-4946085.Rdata')

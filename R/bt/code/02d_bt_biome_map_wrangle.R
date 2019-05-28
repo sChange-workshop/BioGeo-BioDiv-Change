@@ -3,7 +3,7 @@
 # code modified 080219: map results from new models (S, Jtu, Jne)
 
 # load new results and raw data
-load('~/Dropbox/1current/BioTime/local_code/hierarchical/6results/bt/model_coefs_ranefs/BTRfyID_coef_ranef_inclNewModel.Rdata')
+load('~/Dropbox/1current/BioTime/BioGeo-BioDiv-Change/R/bt/model_fits_output/BT_model_coef_ranef.Rdata')
 load('~/Dropbox/BiogeoBioTIME/rarefied_medians.Rdata')
 
 

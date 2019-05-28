@@ -5,7 +5,7 @@ rm(list=ls())
 library(brms)
 library(tidyverse)
 
-load('~/Desktop/revision_models/rlm_clm_txa_modelCoefs.Rdata')
+load('~/Dropbox/1current/BioTime/BioGeo-BioDiv-Change/R/rct/model_fits_output/rlm_clm_txa_modelCoefs.Rdata')
 
 ##---------add the number of time series used to estimate each slope-------------
 ##----the data models were fit too

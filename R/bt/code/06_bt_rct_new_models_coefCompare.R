@@ -5,8 +5,8 @@ rm(list=ls())
 
 library(tidyverse)
 
-load('~/Dropbox/1current/BioTime/local_code/hierarchical/6results/bt/model_coefs_ranefs/BTRfyID_coef_ranef_inclNewModel.Rdata')
-load('~/Desktop/revision_models/rlm_clm_txa_modelCoefs.Rdata')
+load('~/Dropbox/1current/BioTime/BioGeo-BioDiv-Change/R/bt/model_fits_output/BT_model_coef_ranef.Rdata')
+load('~/Dropbox/1current/BioTime/BioGeo-BioDiv-Change/R/rct/model_fits_output/rlm_clm_txa_modelCoefs.Rdata')
 
 #--------rarefied_medians.Rdata for meta data not in model object
 load('~/Dropbox/BiogeoBioTIME/rarefied_medians.Rdata')
@@ -22,6 +22,7 @@ realm_climate_biome <- rarefied_medians %>%
   ungroup()
 
 # want unique climate (latitudinal bands for each biome)
+# this is to compare like with like: some of the rct study estimates span multiple latitudinal bands
 realm_climate_biome <- realm_climate_biome %>%
   # filter(Biome %in% biome_levels_model$Biome) %>%
   mutate(climate_mod = ifelse(Biome=='Arctic', 'Polar', 
@@ -67,7 +68,7 @@ rct_study_estimate <- rlm_clm_txa_studyID_estimate %>%
   select(-b5, -b6)
 
 s1 <- BT_study_estimate %>% 
-  filter(model!='Jne_new_norm') %>% 
+  filter(model!='Jne_new_norm' & model!='Jtu_beta') %>% 
   mutate(bt_slope = Estimate.cYEAR,
          bt_upper = upper_slope,
          bt_lower = lower_slope) %>% 
@@ -77,6 +78,7 @@ s1 <- BT_study_estimate %>%
              by = 'Biome')
 
 s2 <- rct_study_estimate %>% 
+  filter(model!='Jne_new_norm' & time_period=='ALL') %>% 
   mutate(rct_slope = Estimate.cYEAR,
          rct_lower = lower_slope,
          rct_upper = upper_slope,
