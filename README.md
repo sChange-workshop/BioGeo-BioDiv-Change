@@ -1,6 +1,6 @@
 # BioGeo-BioDiv-Change
 
-This repository contains code necessary to replicate data analysis, figures, and tables for the sChange Working Group manuscript "The comparative strength of biodiversity trends in marine and terrestrial assemblages".
+This repository contains code necessary to replicate data analysis, figures, and tables for the sChange Working Group manuscript "The geography of biodiversity change in marine and terrestrial assemblages".
 
 It is archived on Zenodo at : https://doi.org/10.5281/zenodo.1473861
 
@@ -13,7 +13,9 @@ We use the new BioTIME database [Dornelas et al. 2018](https://doi.org/10.1111/g
 **Disclaimer:** The project and related code in this repository represent one version of the code developed for the project, and may yet undergo changes and revisions.
 
 **Authors:**  This work was developed through collaboration initiated during sChange Working Group meetings funded by iDiv in Leipzig, Germany.
+
 Shane Blowes and Sarah Supp share first authorship. Maria Dornelas is senior author on the paper.
+
 Working group participants: Laura Antao, Amanda Bates, Helge Bruelheide, Jon Chase, Faye Moyes, Anne Magurran, Brian McGill, Isla Myers-Smith, Marten Winter, Anne Bjorkman, Diana Bowler, Jarrett E.K. Byrnes, Andrew Gonzalez, Jes Hines, Forest Isbell, Holly Jones, Laetitia M. Navarro, Patrick Thompson, Mark Vellend, Conor Waldock.
 
 **Contacts:** 
@@ -34,9 +36,11 @@ The remaining 8% (26 references) of biodiversity studies analysed were used with
 
 ## R Analysis Files 
 
-These scripts prepare the data for analysis. First (01), studies with large extents are consolidated into equal area grids, and studies with only one geographical location (or small extents) are similarly gridded. Species in these new cell-level time series are aggregated within years, and the coverage (or sample completeness) for each cell-year combination calculated, and all cell-year combinations with coverage < 0.85 are discarded. Second (02), we apply sample-based rarefaction to these new cell-level time series, and calculate diversity metrics (03) as the median of 199 bootstrap rarefactions. (04) Rejoin  rarefied diversity metrics with metadata ready for fitting models. (05) code to make plots for visual inspection of the data (e.g., Fig. S2). (06) Code to be sourced to calculate community composition metrics (to be called from script for simulations). (07) Code to simulate time series of compositional dissimilarity components (i.e., turnover and nestedness) by randomly sampling local assemblages from a constant regional species pool.
+These scripts prepare the data for analysis, produce plots summarising the data, and simulate time series of compositional dissimilarity components. 
 
-Please note that the majority of the code herein was written to run on a HPC cluster.
+First (01), studies with large extents are broken up into equal area grids, and studies with only one geographical location (or small extents) are similarly gridded. Species in these new cell-level time series are aggregated within years, and the coverage (or sample completeness) for each cell-year combination calculated, and all cell-year combinations with coverage < 0.85 are discarded. Second (02), we apply sample-based rarefaction to these new cell-level time series, and calculate diversity metrics (03) as the median of 199 bootstrap rarefactions. (04) Rejoin rarefied diversity metrics with metadata ready for fitting models. (05) code to make plots for visual inspection of the data (e.g., Fig. S2). (06) Code to be sourced to calculate community composition metrics (to be called from script for simulations). (07) Code to simulate time series of compositional dissimilarity components (i.e., turnover and nestedness) by randomly sampling local assemblages from a constant regional species pool.
+
+Please note that much of the code in this repository was written to run on a HPC cluster.
 
 * 01Study_to_Grid.R
 * 02rarefy_griddedData_clusterVersion.R 
