@@ -351,7 +351,7 @@ bottom_inset <- cowplot::plot_grid(s_rct_study_p2 +
 
 bottom <- cowplot::plot_grid(s_rct_p1, bottom_inset, align = 'hv', nrow = 2)
 cowplot::plot_grid(top, bottom, nrow = 2, rel_heights = c(0.1,1))
-ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science Rev_2/figures/Fig2_alt1.png', width = 230, height = 230, units = 'mm')
+# ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science Rev_2/figures/Fig2.pdf', width = 230, height = 230, units = 'mm')
 
 # Jtu_rct_density <- 
 jtu_rct_p1 <-
@@ -445,7 +445,7 @@ bottom_inset2 <- cowplot::plot_grid(jtu_study_p2 +
 
 bottom <- cowplot::plot_grid(jtu_rct_p1, bottom_inset2, align = 'hv', nrow = 2)
 cowplot::plot_grid(top, bottom, nrow = 2, rel_heights = c(0.1,1))
-ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science Rev_2/figures/Fig4_alt1.png', 
+ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science Rev_2/figures/Fig4_alt1.pdf', 
        width = 230, height = 230, units = 'mm')
 
 s_study_rct_taxa_lat <- 

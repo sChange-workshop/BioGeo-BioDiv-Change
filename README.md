@@ -42,10 +42,10 @@ First (01), studies with large extents are broken up into equal area grids, and 
 
 Please note that much of the code in this repository was written to run on a HPC cluster.
 
-* 01Study_to_Grid.R
-* 02rarefy_griddedData_clusterVersion.R 
-* 03collate_rarefied_resamps_median.R
-* 04meta_join.R
+* 01_Study_to_Grid.R
+* 02_rarefy_griddedData_clusterVersion.R 
+* 03_collate_rarefied_resamps_median.R
+* 04_meta_join.R
 * 05_visualise_data.R
 * 06_rarefysamplesturnoverbnh.R
 * 07_sim_repeat_sampling.R
