@@ -19,7 +19,7 @@ load('~/Dropbox/1current/BioTime/BioGeo-BioDiv-Change/R/rct/model_fits_output/rl
 load('~/Dropbox/1current/BioTime/BioGeo-BioDiv-Change/R/rrt/model_coef_ranef/rlm_reg_txa_coef_ranef.Rdata')
 
 #--------rarefied_medians.Rdata for meta data not in model object
-load('~/Desktop/BiogeoBioTIME/rarefied_medians_continents.Rdata')
+load('~/Dropbox/BiogeoBioTIME/rarefied_medians_continents.Rdata')
 rarefied_medians_region <- rarefied_medians
 load('~/Dropbox/BiogeoBioTIME/rarefied_medians.Rdata')
 
