@@ -291,7 +291,7 @@ fig_b <- bt_rct_study_compare %>%
                                    'S_pois_new' = 2),
                         labels = c("Turnover component of\nJaccard's dissimilarity", 
                                    "Species richness")) +
-  labs(x = 'Study-level slope (RCT model)',
+  labs(x = 'Study-level slope (RLT model)',
        y = 'Study-level slope (BT model)',
        tag = 'B') +
   theme_bw() +
@@ -435,8 +435,8 @@ fig_c <- bt_rrt_cell_compare %>%
                                    'S_pois_new' = 2),
                         labels = c("Turnover component of\nJaccard's dissimilarity", 
                                    "Species richness")) +
-  labs(x = 'Study-level slope (RRT model)',
-       y = 'Study-level slope (BT model)',
+  labs(x = 'Cell-level slope (RRT model)',
+       y = 'Cell-level slope (BT model)',
        tag = 'C') +
   theme_bw() +
   theme(#panel.grid = element_blank(),
@@ -493,8 +493,8 @@ fig_d <- bt_rct_cell_compare %>%
                                    'S_pois_new' = 2),
                         labels = c("Turnover component of\nJaccard's dissimilarity", 
                                    "Species richness")) +
-  labs(x = 'Study-level slope (RCT model)',
-       y = 'Study-level slope (BT model)',
+  labs(x = 'Cell-level slope (RLT model)',
+       y = 'Cell-level slope (BT model)',
        tag = 'D') +
   theme_bw() +
   theme(#panel.grid = element_blank(),
@@ -508,7 +508,7 @@ cowplot::plot_grid(fig_a, fig_b,
                    fig_c, fig_d,
                    nrow = 2)
 
-# ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science Rev_2/figures/figSx_low_level_compare.png',
+# ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science rev3/figures/figS3.pdf',
 #        width = 220, height = 220, units = 'mm')
 
 

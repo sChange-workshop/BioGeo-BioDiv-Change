@@ -51,6 +51,7 @@ inset <- rarefied_medians %>%
   scale_fill_manual(name = '',
                     values = c('empirical' = 'black',
                                'simulated' = 'light grey')) +
+  labs(x = 'Duration (years)') +
   theme_bw() +
   theme(legend.position = c(1,1),
         legend.justification = c(1,1),
@@ -153,8 +154,9 @@ sim_result + annotation_custom2(ggplotGrob(inset),
                                data = data.frame(metric = 'Nestedness',
                                                  x = 0, y = 3),
                   xmin = -0.081, xmax = -0.005, ymin = 500, ymax = 1000)
+
 # this is not playing nice...saved using rstudio from plot screen
-# ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science Rev_2/figures/FigS9.png',
+# ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science rev3/figures/FigS9.png',
 #        width = 150, height = 80, units = 'mm')
 
 
