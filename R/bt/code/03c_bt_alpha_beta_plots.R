@@ -64,7 +64,7 @@ alpha_beta_scatter <-
   #                aes(x = deltaS,  ymin = deltaJtu_lower, ymax = deltaJtu_upper, colour = quad, stroke = strokeBLUE,
   #                    alpha = ab_sig)) +
   geom_point(data = study_corr %>% filter(Jtu_grt_Jne=='Jtu > Jne'), 
-             aes(x = (deltaS), (deltaJtu), colour = quad, shape = REALM, size = sizeBLUE),
+             aes(x = deltaS, deltaJtu, colour = quad, shape = REALM, size = sizeBLUE),
              alpha = 0.5) +#
   # Jne > Jtu
   # geom_errorbarh(data = study_corr %>% filter(Jtu_grt_Jne=='Jne > Jtu'),
@@ -86,25 +86,27 @@ alpha_beta_scatter <-
   #             method = 'gam', formula = y ~ s(x, bs = 'cs', k = 4), lty = 2) +
   geom_hline(yintercept = 0, lty = 1) +
   geom_vline(xintercept = 0, lty = 1) +
-  labs(y = (expression(paste(Delta, ' dissimilarity component [proportion of species/yr]', sep = ' '))),
+  labs(y = (expression(paste(Delta, ' Dissimilarity component\n[proportion of species/yr]', sep = ' '))),
        x = (expression(paste(Delta, ' S [log(S)/yr]', sep = ' '))),
        subtitle = 'B') +
   scale_color_manual(values = quad_col, guide = FALSE) +
-  # scale_color_manual(values = c('Marine' = 'Dark blue', 'Terrestrial' = 'Dark orange', 'Freshwater' = 'Dark green'), guide = FALSE) +
-  # scale_alpha(range = c(0.7, 1), guide = FALSE) +
-  scale_size_area(guide = FALSE) +
   scale_shape_manual(values = shapes_realm) +
+  scale_size_area(guide = F, max_size = 3) +
   # scale_x_continuous(trans = sign_sqrt, breaks = c(-0.2, -0.1, -0.01, 0, 0.01, 0.1, 0.2), labels = c(-0.2, -0.1, -0.01, 0, 0.01, 0.1, 0.2)) +
   # scale_y_continuous(trans = sign_sqrt, breaks = c(0, 0.01, 0.02, 0.04, 0.08, 0.12)) +
   theme_bw() +
-  theme(legend.position = c(0.15, 0.9), legend.background = element_blank(),
+  theme(legend.position = c(0, 1), 
+        legend.justification = c(0,1),
+        legend.background = element_blank(),
+        legend.key.size = unit(2, 'mm'), legend.spacing.x=unit(0, 'mm'),
+        legend.text = element_text(size = 6, margin = margin(0,0,0,0,'mm')),
         panel.grid = element_blank(),
-        axis.text.x = element_text(size = 14), axis.text.y = element_text(size = 14), #, angle = 70, vjust = 0.7
-        axis.title = element_text(size = 14),
-        plot.subtitle = element_text(size = 14, face = 'bold')#,
-        # plot.margin = unit(c(0,0,0,0), 'cm')
+        axis.text.x = element_text(size = 6), axis.text.y = element_text(size = 6), #, angle = 70, vjust = 0.7
+        axis.title = element_text(size = 8),
+        plot.subtitle = element_text(size = 10, face = 'bold'),
+        plot.margin = unit(c(0,0,0,5), 'mm')
         ) +
-  guides(shape = guide_legend(title = '', override.aes = list(size = 3, alpha = 1)))
+  guides(shape = guide_legend(title = '', override.aes = list(size = 1, alpha = 1), title.position = 'bottom'))
 #       legend.position = c(0.1, 0.9), legend.text = element_text(size = 22), legend.title = element_text(size = 26)) +
 # guides(shape = guide_legend(override.aes = list(size = 4)))
 
@@ -129,15 +131,15 @@ a_b_summary_plot <-
        subtitle = 'C') +
   theme_bw() +
   theme(panel.grid = element_blank(),
-        axis.text = element_text(size = 14),
-        axis.title = element_text(size = 14),
-        plot.subtitle = element_text(size = 14, face = 'bold')#,
+        axis.text = element_text(size = 6),
+        axis.title = element_text(size = 8),
+        plot.subtitle = element_text(size = 10, face = 'bold')#,
         # plot.margin = unit(c(0,0,0,0), 'cm')
         )
 
 top1 <- cowplot::ggdraw() + cowplot::draw_image('~/Dropbox/BiogeoBioTIME/Figures/Conceptual_figure_pink_purple.png',
                                                 clip = 'on')
-top1a <- cowplot::plot_grid(NULL, top1, NULL, rel_widths = c(0,1,0))
+# top1a <- cowplot::plot_grid(NULL, top1, NULL, rel_widths = c(0,1,0))
 top2 <- cowplot::plot_grid(alpha_beta_scatter, a_b_summary_plot, nrow = 1, align = 'hv')
 # 1 row
 # top <- cowplot::plot_grid(top1, alpha_beta_scatter, a_b_summary_plot, nrow = 1, axis = 't',
@@ -146,7 +148,8 @@ top2 <- cowplot::plot_grid(alpha_beta_scatter, a_b_summary_plot, nrow = 1, align
 # 2 rows
 cowplot::plot_grid(top1, top2, nrow = 2, align = 'hv',
                    scale = c(1.,1))
-# ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science Revision/figures/Fig5_2row.pdf', width = 220, height = 220, units = 'mm')
+ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science rev3/figures/Fig5.pdf', 
+       width = 120, height = 120, units = 'mm')
 
 # save without map
 top

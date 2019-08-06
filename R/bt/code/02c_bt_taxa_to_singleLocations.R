@@ -1,5 +1,5 @@
 # code to get geography for plotting study estimates: get one or more points for biome-taxa-study combinations
-source('~/Dropbox/1current/BioTime/BioGeo-BioDiv-Change/R/bt/code/02_newModel_studyLevel_wrangle.R')
+source('~/Dropbox/1current/BioTime/BioGeo-BioDiv-Change/R/bt/code/02b_studyLevel_coef_wrangle.R')
 world <- map_data('world')
 
 # function to find the convex hull of a polygon
@@ -152,8 +152,8 @@ study_corr <- study_corr %>%
          # set stroke and size for points where both alpha and beta differ from zero
          strokeBLUE = ifelse(((quad=='c1' | quad=='c2') & alphaS==1 & alphaJtu==1), 1.1, 1),
          strokeGREEN = ifelse(((quad=='c3' | quad=='c4') & alphaS==1 & alphaJne==1), 1.1, 1),
-         sizeBLUE = ifelse(((quad=='c1' | quad=='c2') & alphaS==1 & alphaJtu==1), 2.5, .5),
-         sizeGREEN = ifelse(((quad=='c3' | quad=='c4') & alphaS==1 & alphaJne==1), 2.5, .5))
+         sizeBLUE = ifelse(((quad=='c1' | quad=='c2') & alphaS==1 & alphaJtu==1), .8, .2),
+         sizeGREEN = ifelse(((quad=='c3' | quad=='c4') & alphaS==1 & alphaJne==1), .8, .2))
 
 ab_concept_taxa_plot_allPoints <- ab_concept_taxa_plot_allPoints %>%
   mutate(strokeS = ifelse(alphaS==1, 1.1, 1),
