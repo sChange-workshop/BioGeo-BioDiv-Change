@@ -86,7 +86,8 @@ alpha_beta_scatter <-
   #             method = 'gam', formula = y ~ s(x, bs = 'cs', k = 4), lty = 2) +
   geom_hline(yintercept = 0, lty = 1) +
   geom_vline(xintercept = 0, lty = 1) +
-  labs(y = (expression(paste(Delta, ' Dissimilarity component\n[proportion of species/yr]', sep = ' '))),
+  # hack for multiline axis label with expression: https://stackoverflow.com/questions/13223846/ggplot2-two-line-label-with-expression
+  labs(y = (expression(atop(paste(Delta, ' dissimilarity component', sep = ' '), paste('[proportion of species/yr]', sep = ' ')))),
        x = (expression(paste(Delta, ' S [log(S)/yr]', sep = ' '))),
        subtitle = 'B') +
   scale_color_manual(values = quad_col, guide = FALSE) +
@@ -148,8 +149,8 @@ top2 <- cowplot::plot_grid(alpha_beta_scatter, a_b_summary_plot, nrow = 1, align
 # 2 rows
 cowplot::plot_grid(top1, top2, nrow = 2, align = 'hv',
                    scale = c(1.,1))
-ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science rev3/figures/Fig5.pdf', 
-       width = 120, height = 120, units = 'mm')
+# ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science rev3/figures/Fig5.pdf', 
+#        width = 120, height = 120, units = 'mm')
 
 # save without map
 top
