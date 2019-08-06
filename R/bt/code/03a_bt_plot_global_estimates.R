@@ -7,7 +7,7 @@ setwd('~/Dropbox/1current/BioTime/local_code/hierarchical/6results/bt/figs/')
 # load model fits to extract posterior samples
 load('~/Desktop/revision_models/Jtu_norm_BTSRfyID_count.Rdata')
 load('~/Desktop/revision_models/S_pois_BTSRfyID_expPrior.Rdata')
-load('~/Desktop/revision_models/Jne_norm_BTSRfyID_count.Rdata')
+load('~/Desktop/revision_models/Jne_norm_BTSRfyID_count-4950633.Rdata')
 
 # want coefficient plot of the posterior distribution of the global slope
 jne_post <- posterior_samples(Jne_norm_BTSRfyID, pars = 'b_cYEAR', subset = 2000:3000)
@@ -65,8 +65,13 @@ global_jne_inset  = ggplot() +
         # axis.text.x = element_text(size = 28),  axis.title = element_text(size = 28),
         axis.line.x = element_line(size = 1),
         # axis.ticks.x = element_line(size = 2), axis.ticks.length = unit(4, 'mm'),
-        axis.ticks.y = element_blank(), axis.line.y = element_blank(), axis.text.y = element_blank(),
-        legend.background = element_rect(fill = alpha('white', alpha = 0.4)))
+        axis.ticks.y = element_blank(), 
+        axis.line.y = element_blank(), 
+        axis.text.y = element_blank(),
+        axis.text.x = element_text(size = 6),
+        axis.title.x = element_text(size = 8),
+        legend.background = element_rect(fill = alpha('white', alpha = 0.5)),
+        plot.margin = margin(0,0,0,0, 'mm'))
 
 global_jtu_inset <- ggplot() +
   # geom_density(data = jtu_post,
@@ -91,6 +96,8 @@ global_jtu_inset <- ggplot() +
         axis.ticks.y = element_blank(), 
         axis.line.y = element_blank(), 
         axis.text.y = element_blank(),
+        axis.text.x = element_text(size = 6),
+        axis.title.x = element_text(size = 8),
         legend.background = element_rect(fill = alpha('white', alpha = 0.5)),
         plot.margin = margin(0,0,0,0, 'mm'))
 
@@ -116,7 +123,11 @@ global_s_inset <- ggplot() +
         # axis.text.x = element_text(size = 28),  axis.title = element_text(size = 28),
         axis.line.x = element_line(size = 1),
         # axis.ticks.x = element_line(size = 2), axis.ticks.length = unit(4, 'mm'),
-        axis.ticks.y = element_blank(), axis.line.y = element_blank(), axis.text.y = element_blank(),
-        legend.background = element_rect(fill = alpha('white', alpha = 0.5)))
-
+        axis.ticks.y = element_blank(), 
+        axis.line.y = element_blank(), 
+        axis.text.y = element_blank(),
+        axis.text.x = element_text(size = 6),
+        axis.title.x = element_text(size = 8),
+        legend.background = element_rect(fill = alpha('white', alpha = 0.5)),
+        plot.margin = margin(0,0,0,0, 'mm'))
 # ggsave('S_overall_interval.pdf', width = 100, height = 40, units = 'mm')
