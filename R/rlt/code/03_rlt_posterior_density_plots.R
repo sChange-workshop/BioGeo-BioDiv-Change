@@ -9,6 +9,19 @@ library(ggridges)
 load('~/Desktop/revision_models/S_pois_RCTSRfyID_count-4950831.Rdata')
 load('~/Desktop/revision_models/Jtu_norm_RCTSRfyID_count.Rdata')
 
+# first get posterior draws for overall trend
+rct_global_posterior <- tibble(
+  S_global = posterior_samples(S_pois_RCTSRfyID,
+                               pars = 'b_cYEAR',
+                               exact_match = TRUE,
+                               subset = floor(runif(n = 1000,
+                                                    min = 1, max = 2000))) %>% unlist() %>% as.numeric(),
+  Jtu_global = posterior_samples(Jtu_norm_RCTSRfyID,
+                                 pars = 'b_cYEAR',
+                                 exact_match = TRUE,
+                                 subset = floor(runif(n = 1000,
+                                                      min = 1, max = 2000))) %>% unlist() %>% as.numeric())
+
 rct_levels <- S_pois_RCTSRfyID$data %>% 
   as_tibble() %>% 
   distinct(rlm_clm_txa) %>% 
@@ -32,19 +45,14 @@ rct_sample_posterior <- rct_levels %>%
                                                              exact = TRUE,
                                                              subset = floor(runif(n = 1000, 1, max = 2000))) %>%  unlist() %>%  as.numeric()))
 
-S_rct_fixed <- fixef(S_pois_RCTSRfyID, robust = T, probs = c(0.05, 0.95))
-Jtu_rct_fixed <- fixef(Jtu_norm_RCTSRfyID, robust = T, probs = c(0.05, 0.95))
+
 
 rct_sample_posterior <- rct_sample_posterior %>% 
   select(-data) %>% 
   unnest() %>% 
   separate(rlm_clm_txa, into = c('Realm', 'Latitude', 'Taxa'), remove = F) %>% 
-  mutate(S_global_slope = S_rct_fixed['cYEAR','Estimate'],
-         S_upper_slope = S_rct_fixed['cYEAR','Q95'],
-         S_lower_slope = S_rct_fixed['cYEAR','Q5'],
-         Jtu_global_slope = Jtu_rct_fixed['cYEAR','Estimate'],
-         Jtu_upper_slope = Jtu_rct_fixed['cYEAR','Q95'],
-         Jtu_lower_slope = Jtu_rct_fixed['cYEAR','Q5'])
+  mutate(S_global_slope = rep(rct_global_posterior$S_global, times = n_distinct(rlm_clm_txa)),
+         Jtu_global_slope = rep(rct_global_posterior$Jtu_global, times = n_distinct(rlm_clm_txa)))
 
 # posterior distributions of the studies
 study_sample_posterior <- study_levels %>%
@@ -63,12 +71,8 @@ study_sample_posterior <- study_sample_posterior %>%
   select(-data) %>% 
   unnest() %>% 
   separate(`rlm_clm_txa:STUDY_ID`, into = c('Realm', 'Latitude', 'Taxa', 'STUDY_ID'), remove = F) %>% 
-  mutate(S_global_slope = S_rct_fixed['cYEAR','Estimate'],
-         S_upper_slope = S_rct_fixed['cYEAR','Q95'],
-         S_lower_slope = S_rct_fixed['cYEAR','Q5'],
-         Jtu_global_slope = Jtu_rct_fixed['cYEAR','Estimate'],
-         Jtu_upper_slope = Jtu_rct_fixed['cYEAR','Q95'],
-         Jtu_lower_slope = Jtu_rct_fixed['cYEAR','Q5']) %>% 
+  mutate(S_global_slope = rep(rct_global_posterior$S_global, times = n_distinct(`rlm_clm_txa:STUDY_ID`)),
+         Jtu_global_slope = rep(rct_global_posterior$Jtu_global, times = n_distinct(`rlm_clm_txa:STUDY_ID`))) %>% 
   unite(lat_realm, c(Latitude, Realm), remove = F, sep = ' ')
 
 study_sample_posterior$lat_realm <- factor(study_sample_posterior$lat_realm, 
@@ -184,12 +188,12 @@ source('~/Dropbox/1current/R_random/functions/gg_legend.R')
 taxa_fill_horiz_legend <-
 ggplot() +
   geom_density_ridges(data = rct_sample_posterior,
-                      aes(x = S_posteriorSamp + unique(S_global_slope), y = lat_realm,
+                      aes(x = S_posteriorSamp + S_global_slope, y = lat_realm,
                           fill = taxa2),
                       scale = 1, alpha = 0.6,
                       linetype = 0) +
   # scale_linetype_manual(name = 'Realm', values = c('Marine' = 0, 'Terrestrial' = 1, 'Freshwater' = 3)) +
-  scale_fill_manual(name = 'Taxa', values = taxa_col) +
+  scale_fill_manual(name = 'Taxon group', values = taxa_col) +
   geom_vline(data = rct_sample_posterior,
              aes(xintercept = S_global_slope)) +
   geom_vline(xintercept = 0, lty = 2) +
@@ -203,24 +207,55 @@ ggplot() +
         legend.position = 'top',
         legend.direction = 'horizontal',
         legend.background = element_blank(),
-        legend.text = element_text(size = 14),
-        legend.title = element_text(size = 15)) +
-  guides(fill = guide_legend(nrow = 2, keywidth = 1, keyheight = 1, 
+        legend.text = element_text(size = 6),
+        legend.title = element_text(size = 8)) +
+  guides(fill = guide_legend(nrow = 2, keywidth = 0.5, keyheight = 0.5, 
                              # override.aes = list(alpha = 1)
                              ), 
          linetype = guide_legend(override.aes = list(fill = 'White')))
 
 taxa_legend <- gg_legend(taxa_fill_horiz_legend)
+
+# make legend for insetting
+three_grey_legend <- ggplot() +
+  facet_wrap(~Latitude) +
+  geom_density_ridges_gradient(data = study_sample_posterior,
+                               aes(x = S_posteriorSamp + S_global_slope, y = Realm, 
+                                   fill = stat(quantile)
+                               ),
+                               linetype = 0,
+                               scale = 0.95, alpha = 0.6,
+                               calc_ecdf = T,
+                               quantiles = c(0.75, 0.95)) +
+  scale_fill_manual(name = 'Posterior\nprobability',
+                    values = c('#cccccc', '#969696', '#636363'),
+                    labels = c('< 10%', '< 40%', '50%')) +
+  theme(panel.grid = element_blank(),
+        legend.key = element_blank(),
+        legend.position = c(1,0), 
+        legend.justification = c(1,0),
+        legend.background = element_blank(),
+        legend.text = element_text(size = 5),
+        legend.title = element_text(size = 6)
+  ) +
+  guides(fill = guide_legend(keywidth = 0.35, keyheight = 0.3,
+                             # override.aes = list(alpha = 1),
+                             ncol = 1))
+
+inset_legend <- gg_legend(three_grey_legend)
+
 #--------plot-------------------
 # species richness, rct model: panel 1 rct level fill for taxa, panel 2 study level, fill for realm
 s_rct_p1 <-
 ggplot() +
   facet_wrap(~Latitude) +
-  geom_rect(data = rct_sample_posterior %>% distinct(S_lower_slope, S_upper_slope),
-            aes(xmin = S_lower_slope, xmax = S_upper_slope), ymin = -Inf, ymax = Inf,
+  geom_rect(data = rct_global_posterior %>% 
+              summarise(lower = quantile(S_global, probs = 0.05),
+                     upper = quantile(S_global, probs= 0.95)),
+            aes(xmin = lower, xmax = upper, ymin = -Inf, ymax = Inf),
             alpha = 0.3) +
   geom_density_ridges(data = rct_sample_posterior,
-                      aes(x = S_posteriorSamp + unique(S_global_slope), y = Realm,
+                      aes(x = S_posteriorSamp + S_global_slope, y = Realm,
                           fill = taxa2
                           ),
                       scale = 1, alpha = 0.6,
@@ -229,8 +264,11 @@ ggplot() +
   scale_fill_manual(name = 'Taxa', values = taxa_col) +
   scale_x_continuous(breaks = c(-0.02, -0.01, 0, 0.01, 0.02, 0.03),
                      labels = c(-0.02, '', 0, '', 0.02, '')) +
-  geom_vline(data = rct_sample_posterior,
-             aes(xintercept = S_global_slope)) +
+  geom_vline(data = rct_sample_posterior %>% 
+               select(S_global_slope) %>% 
+               slice(1:1000) %>% # only want 1000 draws of posterior (not the repeats)
+               summarise(median = median(S_global_slope)),
+             aes(xintercept = median)) +
   geom_vline(xintercept = 0, lty = 2) +
   theme_bw() +
   labs(y = 'Realm',
@@ -243,54 +281,22 @@ ggplot() +
         # legend.direction = 'horizontal',
         legend.background = element_blank(),
         strip.background = element_blank(),
-        strip.text = element_text(size = 14),#
-        axis.text.x = element_text(size = 13),# vjust = 0.8, angle = 30),
-        axis.text.y = element_text(size = 13, vjust = 0),
-        axis.title = element_text(size = 15)) #+
-  # guides(fill = guide_legend(ncol = 1, keywidth = 0.5, keyheight = 0.5, override.aes = list(alpha = 1)), 
-  #        linetype = guide_legend(override.aes = list(fill = 'White')))
+        plot.subtitle = element_text(size = 10, face = 'bold'),
+        strip.text = element_text(size = 8),#
+        axis.text.x = element_text(size = 6),# vjust = 0.8, angle = 30),
+        axis.text.y = element_text(size = 6, vjust = 0),
+        axis.title = element_text(size = 8)) 
 
-
-# make legend for insetting
-three_grey_legend <- ggplot() +
-  facet_wrap(~Latitude) +
-  geom_rect(data = study_sample_posterior %>% distinct(S_lower_slope, S_upper_slope, Latitude),
-            aes(xmin = S_lower_slope, xmax = S_upper_slope), ymin = -Inf, ymax = Inf,
-            alpha = 0.3) +
-  geom_density_ridges_gradient(data = study_sample_posterior,
-                               aes(x = S_posteriorSamp + unique(S_global_slope), y = Realm, 
-                                   fill = stat(quantile)
-                               ),
-                               linetype = 0,
-                               scale = 0.95, alpha = 0.6,
-                               calc_ecdf = T,
-                               quantiles = c(0.75, 0.95)) +
-  scale_fill_manual(name = 'Posterior\nprobability',
-                    values = c('#cccccc', '#969696', '#636363'),
-                    labels = c('< 10%', '10-40%', '50%')) +
-  theme(panel.grid = element_blank(),
-        legend.key = element_blank(),
-        legend.position = c(1,0), legend.justification = c(1,0),
-        legend.background = element_blank(),
-        strip.background = element_blank(),
-        strip.text = element_text( size = 14),#
-        # strip.text = element_blank(),
-        axis.text = element_text(size = 13),
-        axis.title = element_text(size = 15)
-  ) +
-  guides(fill = guide_legend(keywidth = 0.7, keyheight = 0.7,
-                             # override.aes = list(alpha = 1),
-                             ncol = 1))
-
-inset_legend <- gg_legend(three_grey_legend)
 
 s_rct_study_p2 <- ggplot() +
   facet_wrap(~Latitude) +
-  geom_rect(data = study_sample_posterior %>% distinct(S_lower_slope, S_upper_slope, Latitude),
-            aes(xmin = S_lower_slope, xmax = S_upper_slope), ymin = -Inf, ymax = Inf,
+  geom_rect(data = rct_global_posterior %>% 
+              summarise(lower = quantile(S_global, probs = 0.05),
+                        upper = quantile(S_global, probs= 0.95)),
+            aes(xmin = lower, xmax = upper, ymin = -Inf, ymax = Inf),
             alpha = 0.3) +
   geom_density_ridges_gradient(data = study_sample_posterior,
-                      aes(x = S_posteriorSamp + unique(S_global_slope), y = Realm, 
+                      aes(x = S_posteriorSamp + S_global_slope, y = Realm, 
                           fill = stat(quantile)
                           ),
                       linetype = 0,
@@ -305,14 +311,14 @@ s_rct_study_p2 <- ggplot() +
   # scale_fill_manual(name = 'Realm', values = c('Marine' = '#0072B2', 'Terrestrial' = '#D55E00', 'Freshwater' = '#009E73')) +
   # scale_fill_manual(name = 'Taxa', values = taxa_col) +
   # scale_linetype_manual(name = 'Realm', values = c('Marine' = 0, 'Terrestrial' = 0, 'Freshwater' = 0)) +
-  geom_vline(data = rct_sample_posterior,
-             aes(xintercept = S_global_slope)) +
+  geom_vline(data = rct_global_posterior,
+             aes(xintercept = median(S_global))) +
   geom_vline(xintercept = 0, lty = 2) +
   geom_text(data = study_count,
             aes(x=-0.22, y=Realm, 
-                label=paste('n[study] == ', n.study)),
-            size=3.5,
-            nudge_y = 0.1, parse = T) +
+                label=ifelse(n.study==0, '', paste('n[study] == ', n.study))),
+            size=2,
+            nudge_y = 0.15, parse = T) +
   theme_bw() +
   labs(y = 'Realm',
        x = 'Study-level species richness change [log(S)/yr]',
@@ -323,15 +329,12 @@ s_rct_study_p2 <- ggplot() +
         legend.position = 'none',
         legend.background = element_blank(),
         strip.background = element_blank(),
-        strip.text = element_text( size = 14),#
-        # strip.text = element_blank(),
-        axis.text = element_text(size = 13),
-        axis.text.y = element_text(size = 13, vjust = 0),
-        axis.title = element_text(size = 15)
-        ) +
-  guides(fill = guide_legend(keywidth = 0.75, keyheight = 0.75,
-                             # override.aes = list(alpha = 1),
-                             ncol = 1))
+        strip.text = element_text( size = 8),#
+        plot.subtitle = element_text(size = 10, face = 'bold'),
+        axis.text = element_text(size = 6),
+        axis.text.y = element_text(size = 6, vjust = 0),
+        axis.title = element_text(size = 8)
+        ) 
 
 annotation_custom2 <- function (grob, xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf, data) {
   layer(data = data, stat = StatIdentity, position = PositionIdentity, 
@@ -347,21 +350,24 @@ bottom_inset <- cowplot::plot_grid(s_rct_study_p2 +
                                                         data = data.frame(Realm = 'Freshwater',
                                                                           Latitude = 'Tropical',
                                                                           x = 0, y = 3), 
-                                                       xmin = 0.1, xmax = Inf, ymin = -Inf, ymax = 2))
+                                                       xmin = 0.025, xmax = 0.28, ymin = -Inf, ymax = 2))
 
 bottom <- cowplot::plot_grid(s_rct_p1, bottom_inset, align = 'hv', nrow = 2)
-cowplot::plot_grid(top, bottom, nrow = 2, rel_heights = c(0.1,1))
-# ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science Rev_2/figures/Fig2.pdf', width = 230, height = 230, units = 'mm')
+cowplot::plot_grid(top, bottom, nrow = 2, rel_heights = c(0.05,1))
+# ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science rev3/figures/Fig2_2col.pdf',
+#        width = 120, height = 120, units = 'mm')
 
 # Jtu_rct_density <- 
 jtu_rct_p1 <-
   ggplot() +
   facet_wrap(~Latitude) +
-  geom_rect(data = rct_sample_posterior %>% distinct(Jtu_lower_slope, Jtu_upper_slope),
-            aes(xmin = Jtu_lower_slope, xmax = Jtu_upper_slope), ymin = -Inf, ymax = Inf,
+  geom_rect(data = rct_global_posterior %>% 
+              summarise(lower = quantile(Jtu_global, probs = 0.05),
+                     upper = quantile(Jtu_global, probs= 0.95)),
+            aes(xmin = lower, xmax = upper), ymin = -Inf, ymax = Inf,
             alpha = 0.3) +
   geom_density_ridges(data = rct_sample_posterior,
-                      aes(x = Jtu_posterior + unique(Jtu_global_slope), y = Realm, 
+                      aes(x = Jtu_posterior + Jtu_global_slope, y = Realm, 
                           fill = taxa2
                           ),
                       linetype = 0,
@@ -372,8 +378,8 @@ jtu_rct_p1 <-
                      labels = c(-0.02, 0, 0.02, '', 0.06, ''),
                      ) +
   # scale_linetype_manual(name = 'Realm', values = c('Marine' = 0, 'Terrestrial' = 0, 'Freshwater' = 0)) +
-  geom_vline(data = rct_sample_posterior,
-             aes(xintercept = Jtu_global_slope)) +
+  geom_vline(data = rct_global_posterior,
+             aes(xintercept = median(Jtu_global))) +
   geom_vline(xintercept = 0, lty = 2) +
   scale_y_discrete(labels = scales::wrap_format(12), expand = c(0.05, 0, 0.12, 0)) +
   theme_bw() +
@@ -384,20 +390,21 @@ jtu_rct_p1 <-
         legend.key = element_blank(),
         legend.position = 'none', #c(0.92, 0.9),
         strip.background = element_blank(),
-        strip.text = element_text( size = 14),#hjust = 0,
-        axis.text.x = element_text(size = 13),# vjust = 0.8, angle = 30),
-        axis.text.y = element_text(size = 13, vjust = 0),
-        axis.title = element_text(size = 15))
+        plot.subtitle = element_text(size = 10, face = 'bold'),
+        strip.text = element_text( size = 8),
+        axis.text.x = element_text(size = 6),
+        axis.text.y = element_text(size = 6, vjust = 0),
+        axis.title = element_text(size = 8))
 
-
-# ggsave('FigSx_turnover_density_taxaLevel.pdf', width = 200, height = 200, units = 'mm')
 jtu_study_p2 <- ggplot() +
   facet_wrap(~Latitude) +
-  geom_rect(data = study_sample_posterior %>% distinct(Jtu_lower_slope, Jtu_upper_slope),
-            aes(xmin = Jtu_lower_slope, xmax = Jtu_upper_slope), ymin = -Inf, ymax = Inf,
+  geom_rect(data = rct_global_posterior %>% 
+              summarise(lower = quantile(Jtu_global, probs = 0.05),
+                     upper = quantile(Jtu_global, probs= 0.95)),
+            aes(xmin = lower, xmax = upper), ymin = -Inf, ymax = Inf,
             alpha = 0.3) +
   geom_density_ridges_gradient(data = study_sample_posterior,
-                               aes(x = Jtu_posterior + unique(Jtu_global_slope), y = Realm, 
+                               aes(x = Jtu_posterior + Jtu_global_slope, y = Realm, 
                                    fill = stat(quantile)
                                ),
                                linetype = 0,
@@ -409,14 +416,14 @@ jtu_study_p2 <- ggplot() +
                                '#969696', '#cccccc'),
                     labels = c('< 5%', '5-25%', '50%',
                                '5-25%', '< 5%')) +
-  geom_vline(data = rct_sample_posterior,
-             aes(xintercept = Jtu_global_slope)) +
+  geom_vline(data = rct_global_posterior,
+             aes(xintercept = median(Jtu_global))) +
   geom_vline(xintercept = 0, lty = 2, lwd = 0.5) +
   geom_text(data = study_count,
-            aes(x=-0.04, y=Realm, 
-                label=paste('n[study] == ', n.study)),
-            size=3.5,
-            nudge_y = 0.3, parse = T) +
+            aes(x=0.125, y=Realm, 
+                label=ifelse(n.study==0, '', paste('n[study] == ', n.study))),
+            size=2,
+            nudge_y = 0.15, parse = T) +
   scale_y_discrete(labels = scales::wrap_format(12), expand = c(0.05, 0, 0.12, 0)) +
   theme_bw() +
   labs(y = 'Realm',
@@ -427,13 +434,11 @@ jtu_study_p2 <- ggplot() +
         legend.position = 'none', #c(1,0), legend.justification = c(1,0),
         legend.background = element_blank(),
         strip.background = element_blank(),
-        strip.text = element_text(size = 14),#hjust = 0, 
-        axis.text.x = element_text(size = 13),# vjust = 0.8, angle = 30),
-        axis.text.y = element_text(size = 13, vjust = 0),
-        axis.title = element_text(size = 15)) +
-  guides(fill = guide_legend(keywidth = 0.6, keyheight = 0.6,
-                             # override.aes = list(alpha = 1),
-                             ncol = 1))
+        plot.subtitle = element_text(size = 10, face = 'bold'),
+        strip.text = element_text(size = 8),
+        axis.text.x = element_text(size = 6),
+        axis.text.y = element_text(size = 6, vjust = 0),
+        axis.title = element_text(size = 8))
 
 
 bottom_inset2 <- cowplot::plot_grid(jtu_study_p2 + 
@@ -441,12 +446,12 @@ bottom_inset2 <- cowplot::plot_grid(jtu_study_p2 +
                                                         data = data.frame(Realm = 'Freshwater',
                                                                           Latitude = 'Tropical',
                                                                           x = 0, y = 3), 
-                                                        xmin = 0.1, xmax = Inf, ymin = -Inf, ymax = 2))
+                                                        xmin = 0.025, xmax = 0.2, ymin = -Inf, ymax = 2))
 
 bottom <- cowplot::plot_grid(jtu_rct_p1, bottom_inset2, align = 'hv', nrow = 2)
-cowplot::plot_grid(top, bottom, nrow = 2, rel_heights = c(0.1,1))
-ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science Rev_2/figures/Fig4_alt1.pdf', 
-       width = 230, height = 230, units = 'mm')
+cowplot::plot_grid(top, bottom, nrow = 2, rel_heights = c(0.05,1))
+# ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science rev3/figures/Fig4_2col.pdf', 
+#        width = 120, height = 120, units = 'mm')
 
 s_study_rct_taxa_lat <- 
   ggplot() +

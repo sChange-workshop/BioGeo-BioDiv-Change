@@ -86,8 +86,9 @@ alpha_beta_scatter <-
   #             method = 'gam', formula = y ~ s(x, bs = 'cs', k = 4), lty = 2) +
   geom_hline(yintercept = 0, lty = 1) +
   geom_vline(xintercept = 0, lty = 1) +
-  # hack for multiline axis label with expression: https://stackoverflow.com/questions/13223846/ggplot2-two-line-label-with-expression
-  labs(y = (expression(atop(paste(Delta, ' dissimilarity component', sep = ' '), paste('[proportion of species/yr]', sep = ' ')))),
+  # hack for multiline axis label with expression: https://stackoverflow.com/questions/13223846/ggplot2-two-line-label-with-expression,
+  # and: https://stackoverflow.com/questions/50126447/reducing-spacing-between-lines-when-using-atop/50126864
+  labs(y = expression(atop(NA, atop(paste(Delta, ' dissimilarity component', sep = ' '), paste('[proportion of species/yr]', sep = ' ')))),
        x = (expression(paste(Delta, ' S [log(S)/yr]', sep = ' '))),
        subtitle = 'B') +
   scale_color_manual(values = quad_col, guide = FALSE) +
@@ -103,15 +104,14 @@ alpha_beta_scatter <-
         legend.text = element_text(size = 6, margin = margin(0,0,0,0,'mm')),
         panel.grid = element_blank(),
         axis.text.x = element_text(size = 6), axis.text.y = element_text(size = 6), #, angle = 70, vjust = 0.7
-        axis.title = element_text(size = 8),
+        axis.title.x = element_text(size = 8),
+        axis.title.y = element_text(size = 10),
         plot.subtitle = element_text(size = 10, face = 'bold'),
-        plot.margin = unit(c(0,0,0,5), 'mm')
+        plot.margin = unit(c(0,0,0,0), 'mm')
         ) +
   guides(shape = guide_legend(title = '', override.aes = list(size = 1, alpha = 1), title.position = 'bottom'))
-#       legend.position = c(0.1, 0.9), legend.text = element_text(size = 22), legend.title = element_text(size = 26)) +
-# guides(shape = guide_legend(override.aes = list(size = 4)))
 
-# ggsave('Fig5_gamVis.png', width = 100, height = 100, units = 'mm')
+
 
 # summary of alpha_beta conceptual model
 a_b_summary_plot <-
@@ -127,29 +127,26 @@ a_b_summary_plot <-
                               expression(paste(symbol('\255'), 'Jtu', symbol('\255'), 'S')),
                               expression(paste(symbol('\255'), 'Jne', symbol('\257'), 'S')),
                               expression(paste(symbol('\255'), 'Jne', symbol('\255'), 'S')))) +
-  labs(y = 'Number of biome-taxa-study combinations',
-       x = '',
+  labs(y = 'Number of biome-taxa-study\ncombinations',
+       x = 'Direction of component change',
        subtitle = 'C') +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.text = element_text(size = 6),
         axis.title = element_text(size = 8),
-        plot.subtitle = element_text(size = 10, face = 'bold')#,
-        # plot.margin = unit(c(0,0,0,0), 'cm')
+        plot.subtitle = element_text(size = 10, face = 'bold'),
+        plot.margin = unit(c(0,2,0,0), 'mm')
         )
 
 top1 <- cowplot::ggdraw() + cowplot::draw_image('~/Dropbox/BiogeoBioTIME/Figures/Conceptual_figure_pink_purple.png',
                                                 clip = 'on')
-# top1a <- cowplot::plot_grid(NULL, top1, NULL, rel_widths = c(0,1,0))
+
 top2 <- cowplot::plot_grid(alpha_beta_scatter, a_b_summary_plot, nrow = 1, align = 'hv')
-# 1 row
-# top <- cowplot::plot_grid(top1, alpha_beta_scatter, a_b_summary_plot, nrow = 1, axis = 't',
-#                           rel_widths = c(0.9,1,1))
 
 # 2 rows
 cowplot::plot_grid(top1, top2, nrow = 2, align = 'hv',
                    scale = c(1.,1))
-# ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science rev3/figures/Fig5.pdf', 
+# ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science rev3/figures/Fig5.pdf',
 #        width = 120, height = 120, units = 'mm')
 
 # save without map
