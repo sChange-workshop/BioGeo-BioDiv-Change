@@ -138,7 +138,7 @@ a_b_summary_plot <-
         plot.margin = unit(c(0,2,0,0), 'mm')
         )
 
-top1 <- cowplot::ggdraw() + cowplot::draw_image('~/Dropbox/BiogeoBioTIME/Figures/Conceptual_figure_pink_purple.png',
+top1 <- cowplot::ggdraw() + cowplot::draw_image('~/Dropbox/BiogeoBioTIME/Figures/Conceptual_figure_spacing.png',
                                                 clip = 'on')
 
 top2 <- cowplot::plot_grid(alpha_beta_scatter, a_b_summary_plot, nrow = 1, align = 'hv')
@@ -146,7 +146,7 @@ top2 <- cowplot::plot_grid(alpha_beta_scatter, a_b_summary_plot, nrow = 1, align
 # 2 rows
 cowplot::plot_grid(top1, top2, nrow = 2, align = 'hv',
                    scale = c(1.,1))
-# ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science rev3/figures/Fig5.pdf',
+# ggsave('~/Dropbox/BiogeoBioTIME/Biogeo Science submission/Biogeo Science rev3/figures/Fig5_spacing.pdf',
 #        width = 120, height = 120, units = 'mm')
 
 # save without map
